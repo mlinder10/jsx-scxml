@@ -1,0 +1,20 @@
+{
+  "name": "jsx-scxml-example-flows",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "export:flows": "jsx-scxml-export-flows ./icx.config.json",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "jsx-scxml": "^0.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "imports": {
+    "#modules": "./modules.json",
+    "#announcements": "./announcements.json",
+    "#routing": "./routing.json"
+  }
+}

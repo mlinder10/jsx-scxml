@@ -7,7 +7,7 @@ import {
   Return,
   Script,
 } from "jsx-scxml/std";
-// import announcement from "@announcements" with { type: "json" };
+import announcement from "#announcements" with { type: "json" };
 
 export default (
   <Flow

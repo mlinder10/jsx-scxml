@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "jsx-scxml",
+    "resolveJsonModule": true,
+    "paths": {
+      "#modules": ["./modules.json"],
+      "#announcements": ["./announcements.json"],
+      "#routing": ["./routing.json"]
+    }
+  },
+  "include": ["snapshots"]
+}

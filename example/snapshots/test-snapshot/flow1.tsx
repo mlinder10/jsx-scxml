@@ -8,9 +8,9 @@ import {
   Return,
   SetIntent,
 } from "jsx-scxml/std";
-import module from "@modules" with { type: "json" };
-import announcement from "@announcements" with { type: "json" };
-import routing from "@routing" with { type: "json" };
+import module from "#modules" with { type: "json" };
+import announcement from "#announcements" with { type: "json" };
+import routing from "#routing" with { type: "json" };
 
 export default (
   <Flow
@@ -25,7 +25,7 @@ export default (
     <Announcement
       id="welcome"
       src={announcement["Common/Welcome"]}
-      to="get-dob-menu"
+      to="dtmf-menu-branch"
     />
     <Module
       id="dtmf-menu"
