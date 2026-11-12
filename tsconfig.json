@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "jsx-scxml",
+    "baseUrl": ".",
+    "paths": {
+      "jsx-scxml": ["./src/index.ts"],
+      "jsx-scxml/jsx-runtime": ["./src/core/jsx-runtime.ts"],
+      "jsx-scxml/jsx-dev-runtime": ["./src/core/jsx-dev-runtime.ts"],
+      "jsx-scxml/jexl": ["./src/jexl/index.ts"],
+      "jsx-scxml/swampfox": ["./src/swampfox/index.ts"],
+      "jsx-scxml/swampfox/jsx-runtime": ["./src/swampfox/jsx-runtime.ts"],
+      "jsx-scxml/swampfox/jsx-dev-runtime": [
+        "./src/swampfox/jsx-dev-runtime.ts",
+      ],
+      "jsx-scxml/std": ["./src/std/index.ts"],
+      // TODO: move to owned project
+      "@modules": ["./example/modules.json"],
+      "@announcements": ["./example/announcements.json"],
+      "@routing": ["./example/routing.json"],
+    },
+  },
+  "include": ["src", "test/jsx-types.tsx", "example"],
+}

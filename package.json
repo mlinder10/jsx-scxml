@@ -1,0 +1,59 @@
+{
+  "name": "jsx-scxml",
+  "version": "0.1.0",
+  "description": "A typed JSX authoring runtime for portable SCXML documents",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./jsx-runtime": {
+      "types": "./dist/core/jsx-runtime.d.ts",
+      "default": "./dist/core/jsx-runtime.js"
+    },
+    "./jsx-dev-runtime": {
+      "types": "./dist/core/jsx-dev-runtime.d.ts",
+      "default": "./dist/core/jsx-dev-runtime.js"
+    },
+    "./jexl": {
+      "types": "./dist/jexl/index.d.ts",
+      "default": "./dist/jexl/index.js"
+    },
+    "./swampfox": {
+      "types": "./dist/swampfox/index.d.ts",
+      "default": "./dist/swampfox/index.js"
+    },
+    "./std": {
+      "types": "./dist/std/index.d.ts",
+      "default": "./dist/std/index.js"
+    },
+    "./swampfox/jsx-runtime": {
+      "types": "./dist/swampfox/jsx-runtime.d.ts",
+      "default": "./dist/swampfox/jsx-runtime.js"
+    },
+    "./swampfox/jsx-dev-runtime": {
+      "types": "./dist/swampfox/jsx-dev-runtime.d.ts",
+      "default": "./dist/swampfox/jsx-dev-runtime.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "sync:flows:test": "vitest run tools/sync-flows/test.test.ts",
+    "export:flows": "npm run build && node ./tools/export-flows.mjs",
+    "icx:sync": "npm run build && node ./tools/sync-project.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}
