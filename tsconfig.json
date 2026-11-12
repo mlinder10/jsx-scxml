@@ -27,9 +27,9 @@
       ],
       "jsx-scxml/std": ["./src/std/index.ts"],
       // TODO: move to owned project
-      "@modules": ["./example/modules.json"],
-      "@announcements": ["./example/announcements.json"],
-      "@routing": ["./example/routing.json"],
+      "#modules": ["./example/modules.json"],
+      "#announcements": ["./example/announcements.json"],
+      "#routing": ["./example/routing.json"],
     },
   },
   "include": ["src", "test/jsx-types.tsx", "example"],

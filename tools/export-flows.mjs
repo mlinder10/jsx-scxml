@@ -14,8 +14,8 @@ if (
   configFilePathArgument === "--help" ||
   configFilePathArgument === "-h"
 ) {
-  console.error("Usage: node tools/export-flows.mjs <config-path>");
-  console.error("       npm run export:flows -- <config-path>");
+  console.error("Usage: jsx-scxml-export-flows <config-path>");
+  console.error("       npx jsx-scxml-export-flows <config-path>");
   process.exit(configFilePathArgument ? 0 : 1);
 }
 
@@ -25,8 +25,9 @@ const config = JSON.parse(await readFile(configFilePath));
 
 const snapshotsDirectory = join(projectRoot, config.paths.snapshots);
 const outputDirectory = join(projectRoot, config.paths.out);
-// Keep transpiled modules inside this package so Node can resolve its self-imports.
-const temporaryDirectory = join(packageRoot, ".jsx-scxml-export");
+// Keep temporary modules in the flow project so Node resolves that project's
+// dependencies and package.json "imports" aliases (for example, #modules).
+const temporaryDirectory = join(projectRoot, ".jsx-scxml-export");
 await rm(temporaryDirectory, { recursive: true, force: true });
 await mkdir(temporaryDirectory, { recursive: true });
 

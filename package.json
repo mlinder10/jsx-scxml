@@ -40,8 +40,12 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "tools/export-flows.mjs"
   ],
+  "bin": {
+    "jsx-scxml-export-flows": "./tools/export-flows.mjs"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json",
@@ -51,9 +55,11 @@
     "export:flows": "npm run build && node ./tools/export-flows.mjs",
     "icx:sync": "npm run build && node ./tools/sync-project.mjs"
   },
+  "dependencies": {
+    "typescript": "^5.7.3"
+  },
   "devDependencies": {
     "@types/node": "^26.6.6",
-    "typescript": "^5.7.3",
     "vitest": "^3.0.5"
   }
 }

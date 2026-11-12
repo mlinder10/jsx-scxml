@@ -12,10 +12,10 @@ describe("parseScxmlToTsx", () => {
 
     expect(tsx).toContain('import { jexl } from "jsx-scxml";');
     expect(tsx).toContain(
-      'import module from "@modules" with { type: "json" };',
+      'import module from "#modules" with { type: "json" };',
     );
     expect(tsx).toContain(
-      'import announcement from "@announcements" with { type: "json" };',
+      'import announcement from "#announcements" with { type: "json" };',
     );
     expect(tsx).toContain(
       "flowNode: jexl`Breadcrumbs.enter(NodeType.FLOW, '1000_GetDOB')`",

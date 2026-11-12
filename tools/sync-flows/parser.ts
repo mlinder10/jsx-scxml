@@ -42,10 +42,10 @@ export function parseScxmlToTsx(flowText: string): string {
 
   const stdImports = [...imports].sort().join(",\n  ");
   const sourceImports = [
-    needs.module && 'import module from "@modules" with { type: "json" };',
+    needs.module && 'import module from "#modules" with { type: "json" };',
     needs.announcement &&
-      'import announcement from "@announcements" with { type: "json" };',
-    needs.routing && 'import routing from "@routing" with { type: "json" };',
+      'import announcement from "#announcements" with { type: "json" };',
+    needs.routing && 'import routing from "#routing" with { type: "json" };',
   ].filter(Boolean);
   const flowProps = [
     attribute(scxml, "initial") &&
