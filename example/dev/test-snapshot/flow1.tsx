@@ -10,6 +10,7 @@ import {
   defineNodes,
   finalNode,
   node,
+  refNode,
 } from "jsx-scxml/std";
 import module from "#modules" with { type: "json" };
 import announcement from "#announcements" with { type: "json" };
@@ -23,7 +24,9 @@ const graph = defineNodes({
     agentIntent: node({ xmlId: "agent-intent" }),
     globalReturn: finalNode({ xmlId: "global-return" }),
   },
-  refs: {},
+  refs: {
+    globalReturn: refNode("globalReturn", { position: { x: 0, y: 0 } }),
+  },
 });
 
 export default (
@@ -34,20 +37,22 @@ export default (
       flowNode: jexl`Breadcrumbs.enter(NodeType.FLOW, '1000_Example')`,
       attempts: jexl`0`,
     }}
-    globalModuleDisconnectId={graph.nodes.globalReturn}
-    globalModuleErrorId={graph.nodes.globalReturn}
+    globalModuleDisconnectId={graph.refs.globalReturn}
+    globalModuleErrorId={graph.refs.globalReturn}
   >
     <Announcement
+      name="Welcome Announcement"
       node={graph.nodes.welcome}
       to={graph.nodes.dtmfMenu}
       src={announcement["Common/Welcome"]}
     />
     <Module
+      name="DTMF Menu"
       node={graph.nodes.dtmfMenu}
       to={graph.nodes.dtmfMenuBranch}
       src={module.SFVUniversalMenu}
     />
-    <Branch node={graph.nodes.dtmfMenuBranch} nodeType="Branch">
+    <Branch name="Process DTMF Menu" node={graph.nodes.dtmfMenuBranch}>
       <BranchTransition
         label="Repeat"
         to={graph.nodes.welcome}
@@ -62,6 +67,7 @@ export default (
       />
     </Branch>
     <SetIntent
+      name="Agent Intent"
       node={graph.nodes.agentIntent}
       to={graph.nodes.globalReturn}
       src={routing.agent}

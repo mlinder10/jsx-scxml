@@ -1,0 +1,668 @@
+<scxml xmlns="http://www.w3.org/2005/07/scxml" xmlns:sf="http://www.swampfoxinc.com/sf?version1" xmlns:cs="http://commons.apache.ogr/scxml" version="1.0" ife-version="1.3.2" initial="if-node-Zs1ToBRMKcP33Z9T3bho6" global-module-error-id="if-node-_hzbIVOZ82fD9jQ8sTvn5-ref-UWrY5uMB3hQtEsk1VNslc" global-module-disconnect-id="if-node-92ufh1ZQIRcycCTjIgnra-ref-pIt_VoJ0jw8DUcxSqIVzv">
+  <datamodel>
+    <data id="lastEnabled" expr=""/>
+    <data id="lastResult" expr=""/>
+    <data id="lastEvent" expr=""/>
+    <data id="nodeName" expr=""/>
+    <data id="session" expr="SFVContext.getSession()"/>
+    <data id="provider" expr="SFVContext.getProvider()"/>
+    <data id="member" expr="SFVContext.getMember()"/>
+    <data id="palmettoSession" expr="SFVContext.getPalmettoSession()"/>
+    <data id="ivrStatus" expr="&quot;&quot;"/>
+    <data id="parCode" expr="&quot;&quot;"/>
+    <data id="noMatchAttemptCtr" expr="0"/>
+    <data id="noMatchAttemptCtrMax" expr="2"/>
+  </datamodel>
+  <final id="if-node-FsH7fYcTVKyHCL0R907Wx" metadata="{}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'State::if-node-FsH7fYcTVKyHCL0R907Wx ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <else/>
+        <sf:log expr="'State::if-node-FsH7fYcTVKyHCL0R907Wx SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <onexit>
+      <sf:log expr="'State::if-node-FsH7fYcTVKyHCL0R907Wx ONEXIT'"/>
+    </onexit>
+  </final>
+  <state id="if-node-qXrs6Za0xIyvuhJ5rvush" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-qXrs6Za0xIyvuhJ5rvush ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logLastCommand();</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-qXrs6Za0xIyvuhJ5rvush SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-qXrs6Za0xIyvuhJ5rvush ONEXIT'"/>
+    </onexit>
+  </state>
+  <state id="if-node-28zRlcevPcqDO6HG8l6Ov" metadata="{&quot;nodeType&quot;:&quot;Branch&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:branch::if-node-28zRlcevPcqDO6HG8l6Ov ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <else/>
+        <sf:log expr="'sf:branch::if-node-28zRlcevPcqDO6HG8l6Ov SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition cond="true" target="if-node-itY6mU41gkIj0mH34kbSt">
+      <assign location="branchLabel" expr="'Return to Parent'"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:branch::if-node-28zRlcevPcqDO6HG8l6Ov ONEXIT'"/>
+    </onexit>
+  </state>
+  <state id="if-node-_hzbIVOZ82fD9jQ8sTvn5" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-_hzbIVOZ82fD9jQ8sTvn5 ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>getOperationResult().setOperationStatus(OperationStatus.SUCCESS);  //workaround for a bug
+        let event = (!empty(lastErrorEvent)?lastErrorEvent:SFVConstants.events.ERROR);
+        SFVLogger.INFO('&gt;&gt;&gt;Error received&lt;&lt;&lt;:' + getActiveFlow().getQualifiedFlowName() + ', event:' + event);
+        SFVContext.setLastCommandSetEvent(event);</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-_hzbIVOZ82fD9jQ8sTvn5 SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-_hzbIVOZ82fD9jQ8sTvn5 ONEXIT'"/>
+    </onexit>
+  </state>
+  <state id="if-node-92ufh1ZQIRcycCTjIgnra" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-92ufh1ZQIRcycCTjIgnra ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>SFVLogger.INFO('&gt;&gt;&gt;Disconnect received&lt;&lt;&lt;:' + getActiveFlow().getQualifiedFlowName());</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-92ufh1ZQIRcycCTjIgnra SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-92ufh1ZQIRcycCTjIgnra ONEXIT'"/>
+    </onexit>
+  </state>
+  <state id="if-node-zREc7KV_RxIbxquURhHXv" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-zREc7KV_RxIbxquURhHXv ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logSetIntent();</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-zREc7KV_RxIbxquURhHXv SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-itY6mU41gkIj0mH34kbSt">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-zREc7KV_RxIbxquURhHXv ONEXIT'"/>
+    </onexit>
+  </state>
+  <state id="if-node-itY6mU41gkIj0mH34kbSt" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-itY6mU41gkIj0mH34kbSt ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeStart(nodeName);</script>
+        <script>//</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-itY6mU41gkIj0mH34kbSt SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-FsH7fYcTVKyHCL0R907Wx">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-itY6mU41gkIj0mH34kbSt ONEXIT'"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeEnd(nodeName);
+        SFVContext.logFlowEnd();</script>
+      </if>
+    </onexit>
+  </state>
+  <state id="if-node-Zs1ToBRMKcP33Z9T3bho6" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-Zs1ToBRMKcP33Z9T3bho6 ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logFlowStart();
+        SFVContext.logNodeStart(nodeName);</script>
+        <script>//</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-Zs1ToBRMKcP33Z9T3bho6 SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-wnYiMWp1qCOmIPzcOXKTd">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-Zs1ToBRMKcP33Z9T3bho6 ONEXIT'"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeEnd(nodeName);</script>
+      </if>
+    </onexit>
+  </state>
+  <state id="if-node-hppEOJabwgNyYpSGZ0O_6" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-hppEOJabwgNyYpSGZ0O_6 ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeStart(nodeName);
+        SFVContext.setLastCommandContinue();</script>
+        <script>let baseScript = "JmPartbAmbProviderAuthQuery@PalmettoDatabaseQuery";
+        
+        if (palmettoSession.service.equals(PalmettoConstants.services.RR)) {
+          baseScript = "RrbPartbAmbProviderAuthQuery@PalmettoDatabaseQuery";
+        }
+        
+        // current date format is mmddyyyy, needs to be yyyymmdd
+        function formatDate(date) {
+          date += '';
+          return date.substring(4) + date.substring(0, 2) + date.substring(2, 4);
+        }
+        
+        const startDate = formatDate(member.fromDos);
+        const endDate = formatDate(member.toDos);
+        
+        const res = evalScript(
+          baseScript,
+          provider.npi,
+          member.mbi,
+          startDate,
+          endDate
+        );
+        if (res.response != PalmettoConstants.WSReturnCodes.OK) {
+          SFVLogger.INFO("Invalid " + baseScript + " Response: " + res);
+          return;
+        }
+        
+        SFVLogger.INFO("Result: " + res);
+        
+        const target = res.result[0];
+        if (empty(target)) {
+          SFVLogger.DEBUG("Invalid prior auth status received
+    	From: " + fromDos + "
+    	To: " + toDos)
+          return;
+        }
+        
+        SFVLogger.INFO("ivr_status: " + target.ivr_status);
+        ivrStatus = target.ivr_status;
+        
+        if (ivrStatus.equals("NON-AFFIRMED")) {
+          const tmpParCode = target.ivr_par_codes.indexOf("Y") + 1;
+          if (tmpParCode == 0) {
+              SFVLogger.DEBUG("PAR Code not found: " + target.ivr_par_codes);
+              return
+          }
+        
+          if (tmpParCode != 14) {
+              parCode = tmpParCode + "";
+              return;
+          }
+        
+          const parCodeLetter = target.ivr_par14_codes.indexOf("Y");
+          if (parCodeLetter == -1) {
+              SFVLogger.DEBUG("PAR Code 14 letter not found: " + target.ivr_par14_codes);
+              return;
+          }
+        
+          parCode = tmpParCode + ["A", "B", "C", "D", "E"][parCodeLetter];
+        }</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-hppEOJabwgNyYpSGZ0O_6 SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-GxPCtb6ZASKCWBt7J2K9_">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-hppEOJabwgNyYpSGZ0O_6 ONEXIT'"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeEnd(nodeName);</script>
+      </if>
+    </onexit>
+  </state>
+  <state id="if-node-GxPCtb6ZASKCWBt7J2K9_" metadata="{&quot;nodeType&quot;:&quot;Branch&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:branch::if-node-GxPCtb6ZASKCWBt7J2K9_ ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <else/>
+        <sf:log expr="'sf:branch::if-node-GxPCtb6ZASKCWBt7J2K9_ SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition cond="!session.lastCommand.equals(SFVConstants.lastCommand.CONTINUE)" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'Process Last Command'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <transition cond="!empty(ivrStatus)" target="if-node-IEShPTmy62gjkChDqgPVS">
+      <assign location="branchLabel" expr="'Lookup OK'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <transition cond="true" target="if-node-jqR_oVlmD7AiBAstm0OU_">
+      <assign location="branchLabel" expr="'Lookup Failed'"/>
+      <script>SFVContext.logTransition(branchLabel);
+        noMatchAttemptCtr++;</script>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:branch::if-node-GxPCtb6ZASKCWBt7J2K9_ ONEXIT'"/>
+    </onexit>
+  </state>
+  <state id="if-node-hIK_7aKVO2LkX9wnEke6u" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-hIK_7aKVO2LkX9wnEke6u ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeStart(nodeName);
+        SFVContext.setLastCommandContinue();</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-hIK_7aKVO2LkX9wnEke6u SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-ImfEWOjZbpCqVASz_PKyU">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-hIK_7aKVO2LkX9wnEke6u ONEXIT'"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeEnd(nodeName);
+        
+        var returnEntityType = lastResult.entityResultValue['replay_type'];
+        if (!empty(returnEntityType)) {
+        	SFVLogger.INFO("Found replay_type");
+        	lastResult.lastInputLabel = 'Replay';
+        	return;
+        }
+        
+        returnEntityType = lastResult.entityResultValue['another_type'];
+        if (!empty(returnEntityType)) {
+        	SFVLogger.INFO("Found another_type");
+        	lastResult.lastInputLabel = 'Reenter';
+        	return;
+        }
+        
+        returnEntityType = lastResult.entityResultValue['main_menu_type'];
+        if (!empty(returnEntityType)) {
+        	SFVLogger.INFO("Found main_menu_type");
+        	lastResult.lastInputLabel = 'MainMenu';
+        	return;
+        }
+        
+        returnEntityType = lastResult.entityResultValue['agent_type'];
+        if (!empty(returnEntityType)) {
+        	SFVLogger.INFO("Found agent_type");
+        	lastResult.lastInputLabel = 'Agent';
+        	return;
+        }</script>
+      </if>
+    </onexit>
+  </state>
+  <state id="if-node-ImfEWOjZbpCqVASz_PKyU" metadata="{&quot;nodeType&quot;:&quot;Branch&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:branch::if-node-ImfEWOjZbpCqVASz_PKyU ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <else/>
+        <sf:log expr="'sf:branch::if-node-ImfEWOjZbpCqVASz_PKyU SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition cond="!session.lastCommand.equals(SFVConstants.lastCommand.CONTINUE)" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'Process Last Command'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <transition cond="lastResult.lastInputLabel.equalsIgnoreCase('Agent')" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'Agent'"/>
+      <script>SFVContext.logTransition(branchLabel);
+        SFVContext.setLastCommandSetEvent(SFVConstants.events.AGENT);</script>
+    </transition>
+    <transition cond="lastResult.lastMenuFail.equalsIgnoreCase('no.match')" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'No Match'"/>
+      <script>SFVContext.logTransition(branchLabel);
+        SFVContext.setLastCommandSetEvent(SFVConstants.events.MENU_MAX_REC_ATTEMPTS);</script>
+    </transition>
+    <transition cond="lastResult.lastMenuFail.equalsIgnoreCase('no.input')" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'No Input'"/>
+      <script>SFVContext.logTransition(branchLabel);
+        SFVContext.setLastCommandSetEvent(SFVConstants.events.MENU_MAX_REC_ATTEMPTS);</script>
+    </transition>
+    <transition cond="noMatchAttemptCtr &gt; noMatchAttemptCtrMax" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'Having Trouble'"/>
+      <script>SFVContext.logTransition(branchLabel);
+        SFVContext.setLastCommandSetEvent(SFVConstants.events.AGENT);</script>
+    </transition>
+    <transition cond="lastResult.lastInputLabel.equalsIgnoreCase('Replay')" target="if-node-jqR_oVlmD7AiBAstm0OU_">
+      <assign location="branchLabel" expr="'Replay'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <transition cond="lastResult.lastInputLabel.equalsIgnoreCase('Reenter')" target="if-node-Zs1ToBRMKcP33Z9T3bho6">
+      <assign location="branchLabel" expr="'Reenter'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <transition cond="lastResult.lastInputLabel.equalsIgnoreCase('MainMenu')" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'Main Menu'"/>
+      <script>SFVContext.logTransition(branchLabel);
+        
+        if (!palmettoSession.jurisdiction.equals('RR')) {
+            getSessionContext().setResultValue('intent.collector.flow', PalmettoConstants.intentRouterFlows.JJ_JM_PART_B_IntentRouterFlow);
+            palmettoSession.appID = PalmettoConstants.appIDs.AppID_PartB;
+            evalScript('updateQualKeyAppID@PalmettoUtilities');
+        }
+        
+        SFVContext.setLastCommandSetEvent(PalmettoConstants.events.RETURN_MAIN_MENU);</script>
+    </transition>
+    <transition cond="true" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'Other'"/>
+      <script>SFVContext.logTransition(branchLabel);
+        SFVContext.setLastCommandSetEvent(SFVConstants.events.AGENT);</script>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:branch::if-node-ImfEWOjZbpCqVASz_PKyU ONEXIT'"/>
+    </onexit>
+  </state>
+  <state id="if-node-jqR_oVlmD7AiBAstm0OU_" metadata="{}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'State::if-node-jqR_oVlmD7AiBAstm0OU_ ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <sf:announcement src="" srcexpr="palmettoSession.service.equals(PalmettoConstants.services.RRB) ? 'Common/PriorAuthStatus/NoPriorAuth_ToDate' : 'Common/PriorAuthStatus/NoPriorAuth'"/>
+        <else/>
+        <sf:log expr="'State::if-node-jqR_oVlmD7AiBAstm0OU_ SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-hIK_7aKVO2LkX9wnEke6u">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'State::if-node-jqR_oVlmD7AiBAstm0OU_ ONEXIT'"/>
+    </onexit>
+  </state>
+  <state id="if-node-wnYiMWp1qCOmIPzcOXKTd" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-wnYiMWp1qCOmIPzcOXKTd ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeStart(nodeName);
+        SFVContext.setLastCommandContinue();</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-wnYiMWp1qCOmIPzcOXKTd SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-tzIz_UoVnsYKhdT66zL8W">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-wnYiMWp1qCOmIPzcOXKTd ONEXIT'"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeEnd(nodeName);</script>
+      </if>
+    </onexit>
+  </state>
+  <state id="if-node-tzIz_UoVnsYKhdT66zL8W" metadata="{&quot;nodeType&quot;:&quot;Branch&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:branch::if-node-tzIz_UoVnsYKhdT66zL8W ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <else/>
+        <sf:log expr="'sf:branch::if-node-tzIz_UoVnsYKhdT66zL8W SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition cond="!session.lastCommand.equals(SFVConstants.lastCommand.CONTINUE)" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'Process Events'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <transition cond="true" target="if-node-hppEOJabwgNyYpSGZ0O_6">
+      <assign location="branchLabel" expr="'Continue'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:branch::if-node-tzIz_UoVnsYKhdT66zL8W ONEXIT'"/>
+    </onexit>
+  </state>
+  <state id="if-node-IEShPTmy62gjkChDqgPVS" metadata="{&quot;nodeType&quot;:&quot;Branch&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:branch::if-node-IEShPTmy62gjkChDqgPVS ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <else/>
+        <sf:log expr="'sf:branch::if-node-IEShPTmy62gjkChDqgPVS SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition cond="&quot;NON-AFFIRMED&quot;.equalsIgnoreCase(ivrStatus)" target="if-node-nXZmDLlIKDrazAqmslu1j">
+      <assign location="branchLabel" expr="'Non-Affirmed'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <transition cond="&quot;DELETED&quot;.equalsIgnoreCase(ivrStatus)" target="if-node-nqLZxJ6sOGPASWzS7RCOl">
+      <assign location="branchLabel" expr="'Deleted'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <transition cond="&quot;AFFIRMED&quot;.equalsIgnoreCase(ivrStatus)" target="if-node-KNZxVCPzVLDxjUZTmAEGp">
+      <assign location="branchLabel" expr="'Affirmed'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <transition cond="true" target="if-node-BA9YbqpaRdXSTIIO9hCxm">
+      <assign location="branchLabel" expr="'Pending / Revised / Sent'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:branch::if-node-IEShPTmy62gjkChDqgPVS ONEXIT'"/>
+    </onexit>
+  </state>
+  <state id="if-node-nqLZxJ6sOGPASWzS7RCOl" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-nqLZxJ6sOGPASWzS7RCOl ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeStart(nodeName);</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-nqLZxJ6sOGPASWzS7RCOl SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-5pyiqIEEnDACx7C1N6kMn">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-nqLZxJ6sOGPASWzS7RCOl ONEXIT'"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeEnd(nodeName);</script>
+      </if>
+    </onexit>
+  </state>
+  <state id="if-node-KNZxVCPzVLDxjUZTmAEGp" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-KNZxVCPzVLDxjUZTmAEGp ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeStart(nodeName);</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-KNZxVCPzVLDxjUZTmAEGp SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-5pyiqIEEnDACx7C1N6kMn">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-KNZxVCPzVLDxjUZTmAEGp ONEXIT'"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeEnd(nodeName);</script>
+      </if>
+    </onexit>
+  </state>
+  <state id="if-node-5pyiqIEEnDACx7C1N6kMn" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-5pyiqIEEnDACx7C1N6kMn ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeStart(nodeName);
+        SFVContext.setLastCommandContinue();</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-5pyiqIEEnDACx7C1N6kMn SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-DIym83A7vogNce0pmXHUH">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-5pyiqIEEnDACx7C1N6kMn ONEXIT'"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeEnd(nodeName);
+        
+        var returnEntityType = lastResult.entityResultValue['repeat_type'];
+        if (!empty(returnEntityType)) {
+        	SFVLogger.INFO("Found repeat_type");
+        	lastResult.lastInputLabel = 'Repeat';
+        	return;
+        }
+        
+        returnEntityType = lastResult.entityResultValue['another_type'];
+        if (!empty(returnEntityType)) {
+        	SFVLogger.INFO("Found another_type");
+        	lastResult.lastInputLabel = 'Another';
+        	return;
+        }
+        
+        returnEntityType = lastResult.entityResultValue['main_menu_type'];
+        if (!empty(returnEntityType)) {
+        	SFVLogger.INFO("Found main_menu_type");
+        	lastResult.lastInputLabel = 'MainMenu';
+        	return;
+        }
+        
+        returnEntityType = lastResult.entityResultValue['agent_type'];
+        if (!empty(returnEntityType)) {
+        	SFVLogger.INFO("Found agent_type");
+        	lastResult.lastInputLabel = 'Agent';
+        	return;
+        }</script>
+      </if>
+    </onexit>
+  </state>
+  <state id="if-node-DIym83A7vogNce0pmXHUH" metadata="{&quot;nodeType&quot;:&quot;Branch&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:branch::if-node-DIym83A7vogNce0pmXHUH ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <else/>
+        <sf:log expr="'sf:branch::if-node-DIym83A7vogNce0pmXHUH SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition cond="!session.lastCommand.equals(SFVConstants.lastCommand.CONTINUE)" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'Process Last Command'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <transition cond="lastResult.lastInputLabel.equalsIgnoreCase('Agent')" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'Agent'"/>
+      <script>SFVContext.logTransition(branchLabel);
+        SFVContext.setLastCommandSetEvent(SFVConstants.events.AGENT);</script>
+    </transition>
+    <transition cond="lastResult.lastMenuFail.equalsIgnoreCase('no.match')" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'No Match'"/>
+      <script>SFVContext.logTransition(branchLabel);
+        SFVContext.setLastCommandSetEvent(SFVConstants.events.MENU_MAX_REC_ATTEMPTS);</script>
+    </transition>
+    <transition cond="lastResult.lastMenuFail.equalsIgnoreCase('no.input')" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'No Input'"/>
+      <script>SFVContext.logTransition(branchLabel);
+        SFVContext.setLastCommandSetEvent(SFVConstants.events.MENU_MAX_REC_ATTEMPTS);</script>
+    </transition>
+    <transition cond="lastResult.lastInputLabel.equalsIgnoreCase('Repeat')" target="if-node-IEShPTmy62gjkChDqgPVS">
+      <assign location="branchLabel" expr="'Repeat'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <transition cond="lastResult.lastInputLabel.equalsIgnoreCase('Another')" target="if-node-Zs1ToBRMKcP33Z9T3bho6">
+      <assign location="branchLabel" expr="'Date Range'"/>
+      <script>SFVContext.logTransition(branchLabel);</script>
+    </transition>
+    <transition cond="lastResult.lastInputLabel.equalsIgnoreCase('MainMenu')" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'Main Menu'"/>
+      <script>SFVContext.logTransition(branchLabel);
+        
+        if (!palmettoSession.jurisdiction.equals('RR')) {
+            getSessionContext().setResultValue('intent.collector.flow', PalmettoConstants.intentRouterFlows.JJ_JM_PART_B_IntentRouterFlow);
+            palmettoSession.appID = PalmettoConstants.appIDs.AppID_PartB;
+            evalScript('updateQualKeyAppID@PalmettoUtilities');
+        }
+        
+        SFVContext.setLastCommandSetEvent(PalmettoConstants.events.RETURN_MAIN_MENU);</script>
+    </transition>
+    <transition cond="true" target="if-node-qXrs6Za0xIyvuhJ5rvush">
+      <assign location="branchLabel" expr="'Other'"/>
+      <script>SFVContext.logTransition(branchLabel);
+        SFVContext.setLastCommandSetEvent(SFVConstants.events.AGENT);</script>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:branch::if-node-DIym83A7vogNce0pmXHUH ONEXIT'"/>
+    </onexit>
+  </state>
+  <state id="if-node-BA9YbqpaRdXSTIIO9hCxm" metadata="{&quot;nodeType&quot;:&quot;Script&quot;}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'sf:script::if-node-BA9YbqpaRdXSTIIO9hCxm ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeStart(nodeName);</script>
+        <else/>
+        <sf:log expr="'sf:script::if-node-BA9YbqpaRdXSTIIO9hCxm SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-5pyiqIEEnDACx7C1N6kMn">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'sf:script::if-node-BA9YbqpaRdXSTIIO9hCxm ONEXIT'"/>
+      <if cond="lastEnabled">
+        <script>SFVContext.logNodeEnd(nodeName);</script>
+      </if>
+    </onexit>
+  </state>
+  <state id="if-node-nXZmDLlIKDrazAqmslu1j" metadata="{}">
+    <onentry>
+      <assign location="nodeName" expr="''"/>
+      <sf:log expr="'State::if-node-nXZmDLlIKDrazAqmslu1j ONENTRY'"/>
+      <assign location="lastEnabled" expr="true"/>
+      <if cond="lastEnabled">
+        <sf:announcement src="" srcexpr="&quot;Common/PriorAuthStatus/PAStatus_&quot; + parCode"/>
+        <else/>
+        <sf:log expr="'State::if-node-nXZmDLlIKDrazAqmslu1j SKIPPED; enabled expression evaluated false.'"/>
+      </if>
+    </onentry>
+    <transition event="module.complete" target="if-node-5pyiqIEEnDACx7C1N6kMn">
+      <assign location="lastEvent" expr="_event"/>
+    </transition>
+    <onexit>
+      <sf:log expr="'State::if-node-nXZmDLlIKDrazAqmslu1j ONEXIT'"/>
+    </onexit>
+  </state>
+</scxml>

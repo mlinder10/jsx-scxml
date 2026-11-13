@@ -20,6 +20,7 @@ const configFilePath = resolve(process.cwd(), configFilePathArgument);
 const projectRoot = dirname(configFilePath);
 const config = JSON.parse(await readFile(configFilePath));
 
+const snapshotsDirectory = join(projectRoot, config.paths.snapshots);
 const scriptsDirectory = join(projectRoot, config.paths.scripts);
 const modulesFile = join(projectRoot, config.paths.modules);
 const routingFile = join(projectRoot, config.paths.routing);

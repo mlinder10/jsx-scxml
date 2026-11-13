@@ -8,11 +8,11 @@ const FLOW_NAME = "base";
 const toolDirectory = dirname(fileURLToPath(import.meta.url));
 export const testScxmlPath = resolve(
   toolDirectory,
-  `../../example/out/test-snapshot/${FLOW_NAME}.scxml`,
+  `../../example/snapshots/test-snapshot/${FLOW_NAME}.scxml`,
 );
 export const testTsxPath = resolve(
   toolDirectory,
-  `../../example/snapshots/test-snapshot/${FLOW_NAME}.tsx`,
+  `../../example/dev/test-snapshot/${FLOW_NAME}.tsx`,
 );
 
 /** Regenerates the TSX fixture from the matching exported SCXML fixture. */

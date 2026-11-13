@@ -3,11 +3,11 @@
     "postgresUrl": "<icx_config_url>"
   },
   "paths": {
-    "out": "./out",
     "snapshots": "./snapshots",
     "scripts": "./scripts",
     "modules": "./modules.json",
     "routing": "./routing.json",
-    "announcements": "./announcements"
+    "announcements": "./announcements",
+    "dev": "./dev"
   }
 }

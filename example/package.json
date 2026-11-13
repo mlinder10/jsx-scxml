@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "export:flows": "jsx-scxml-export-flows ./icx.config.json",
+    "compile-flows": "jsx-scxml-compile-flows ./icx.config.json",
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {

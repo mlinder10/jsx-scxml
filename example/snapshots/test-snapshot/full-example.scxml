@@ -1,0 +1,237 @@
+<scxml xmlns="http://www.w3.org/2005/07/scxml" initial="if-node-wG5oRZSz35x1mSGXSfyhi" version="1.0" ife-version="1.3.2" global-module-error-id="if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG" global-module-disconnect-id="if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG" xmlns:sf="http://www.swampfoxinc.com/sf?version1" xmlns:cs="http://commons.apache.ogr/scxml">
+	<!--FLOWCOMMENT|{"comment":"Some comment","position":{"x":36,"y":-108},"color":"#FFC","width":108,"height":24}-->
+	<!--REFNODE|{"id":"if&#45;node&#45;lJBKPkpbSIGT4vu3Kk1jt&#45;ref&#45;boJnOon3jN0Qufx3R5_eG","position":{"x":0,"y":180},"refedNodeID":"if&#45;node&#45;lJBKPkpbSIGT4vu3Kk1jt"}-->
+	<!--REFNODE|{"id":"if&#45;node&#45;ycM48NwqkuHjamQVlgEM1&#45;ref&#45;kcFpJDlOGYGpsRiLLnddT","position":{"x":276,"y":120},"refedNodeID":"if&#45;node&#45;ycM48NwqkuHjamQVlgEM1"}-->
+	<datamodel>
+		<data id="lastEnabled"/>
+		<data id="lastResult"/>
+		<data id="lastEvent"/>
+		<data id="nodeName"/>
+	</datamodel>
+	<state id="if-node-vMJ4ZrUyJTjfBGbFZQpAU" metadata="{&quot;x&quot;:600,&quot;y&quot;:0}">
+		<onentry>
+			<assign location="nodeName" expr="''"/>
+			<sf:log expr="'sf:module::if-node-vMJ4ZrUyJTjfBGbFZQpAU ONENTRY'"/>
+			<assign location="lastEnabled" expr="true"/>
+			<if cond="lastEnabled">
+				<sf:module src="f83840ea-9c6b-4dbc-8e21-1df52a21b88e" srcexpr="" namelist="" result="lastResult"/>
+				<else/>
+				<sf:log expr="'sf:module::if-node-vMJ4ZrUyJTjfBGbFZQpAU SKIPPED; enabled expression evaluated false.'"/>
+			</if>
+		</onentry>
+		<transition event="module.complete" target="if-node-ycM48NwqkuHjamQVlgEM1">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.disconnect" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.error" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<onexit>
+			<sf:log expr="'sf:module::if-node-vMJ4ZrUyJTjfBGbFZQpAU ONEXIT'"/>
+		</onexit>
+	</state>
+	<state id="if-node-ycM48NwqkuHjamQVlgEM1" metadata="{&quot;x&quot;:876,&quot;y&quot;:0,&quot;nodeType&quot;:&quot;Script&quot;}">
+		<onentry>
+			<assign location="nodeName" expr="''"/>
+			<sf:log expr="'sf:script::if-node-ycM48NwqkuHjamQVlgEM1 ONENTRY'"/>
+			<assign location="lastEnabled" expr="true"/>
+			<if cond="lastEnabled">
+				<sf:script src="a50a5648-ac7c-4a92-ad56-aaf28525a974" srcexpr="" async="false" namelist="" result="lastResult"/>
+				<else/>
+				<sf:log expr="'sf:script::if-node-ycM48NwqkuHjamQVlgEM1 SKIPPED; enabled expression evaluated false.'"/>
+			</if>
+		</onentry>
+		<transition event="module.complete" target="if-node-G51_TPxQWOKM0y6G8OjZV">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.disconnect" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.error" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<onexit>
+			<sf:log expr="'sf:script::if-node-ycM48NwqkuHjamQVlgEM1 ONEXIT'"/>
+		</onexit>
+	</state>
+	<state id="if-node-G51_TPxQWOKM0y6G8OjZV" metadata="{&quot;x&quot;:1152,&quot;y&quot;:0}">
+		<onentry>
+			<assign location="nodeName" expr="''"/>
+			<sf:log expr="'sf:intent::if-node-G51_TPxQWOKM0y6G8OjZV ONENTRY'"/>
+			<assign location="lastEnabled" expr="true"/>
+			<if cond="lastEnabled">
+				<sf:intent src="03100" srcexpr="" immediate="false"/>
+				<else/>
+				<sf:log expr="'sf:intent::if-node-G51_TPxQWOKM0y6G8OjZV SKIPPED; enabled expression evaluated false.'"/>
+			</if>
+		</onentry>
+		<transition event="module.complete" target="if-node-EcH0Ixh3VJMznmpwid73G">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.disconnect" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.error" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<onexit>
+			<sf:log expr="'sf:intent::if-node-G51_TPxQWOKM0y6G8OjZV ONEXIT'"/>
+		</onexit>
+	</state>
+	<state id="if-node-EcH0Ixh3VJMznmpwid73G" metadata="{&quot;x&quot;:1428,&quot;y&quot;:0,&quot;nodeType&quot;:&quot;Results&quot;}">
+		<onentry>
+			<assign location="nodeName" expr="''"/>
+			<sf:log expr="'sf:results::if-node-EcH0Ixh3VJMznmpwid73G ONENTRY'"/>
+			<assign location="lastEnabled" expr="true"/>
+			<if cond="lastEnabled">
+				<sf:assignResult name="AssignResultParam" srcexpr="true"/>
+				<sf:assignResult name="Result2" srcexpr="false"/>
+				<else/>
+				<sf:log expr="'sf:results::if-node-EcH0Ixh3VJMznmpwid73G SKIPPED; enabled expression evaluated false.'"/>
+			</if>
+		</onentry>
+		<transition event="module.complete" target="if-node-_j3myEJ8G0Ynpzr_UQ26Z">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.disconnect" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.error" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<onexit>
+			<sf:log expr="'sf:results::if-node-EcH0Ixh3VJMznmpwid73G ONEXIT'"/>
+		</onexit>
+	</state>
+	<state id="if-node-_j3myEJ8G0Ynpzr_UQ26Z" metadata="{&quot;x&quot;:1704,&quot;y&quot;:0}">
+		<onentry>
+			<assign location="nodeName" expr="''"/>
+			<sf:log expr="'sf:language::if-node-_j3myEJ8G0Ynpzr_UQ26Z ONENTRY'"/>
+			<assign location="lastEnabled" expr="true"/>
+			<if cond="lastEnabled">
+				<sf:language src="english" srcexpr=""/>
+				<else/>
+				<sf:log expr="'sf:language::if-node-_j3myEJ8G0Ynpzr_UQ26Z SKIPPED; enabled expression evaluated false.'"/>
+			</if>
+		</onentry>
+		<transition event="module.complete" target="if-node-uSQz1Lz4tfORGQwpAwfCa">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.disconnect" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.error" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<onexit>
+			<sf:log expr="'sf:language::if-node-_j3myEJ8G0Ynpzr_UQ26Z ONEXIT'"/>
+		</onexit>
+	</state>
+	<state id="if-node-uSQz1Lz4tfORGQwpAwfCa" metadata="{&quot;x&quot;:1980,&quot;y&quot;:0}">
+		<onentry>
+			<assign location="nodeName" expr="''"/>
+			<sf:log expr="'sf:announcement::if-node-uSQz1Lz4tfORGQwpAwfCa ONENTRY'"/>
+			<assign location="lastEnabled" expr="true"/>
+			<if cond="lastEnabled">
+				<sf:announcement src="Advanced" srcexpr=""/>
+				<else/>
+				<sf:log expr="'sf:announcement::if-node-uSQz1Lz4tfORGQwpAwfCa SKIPPED; enabled expression evaluated false.'"/>
+			</if>
+		</onentry>
+		<transition event="module.complete" target="if-node-7BRdOU9rc21HxKpieqFFW">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.disconnect" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.error" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<onexit>
+			<sf:log expr="'sf:announcement::if-node-uSQz1Lz4tfORGQwpAwfCa ONEXIT'"/>
+		</onexit>
+	</state>
+	<state id="if-node-c_pGGbBwyas79ctAql42r" metadata="{&quot;x&quot;:2532,&quot;y&quot;:0}">
+		<onentry>
+			<assign location="nodeName" expr="''"/>
+			<sf:log expr="'sf:disconnect::if-node-c_pGGbBwyas79ctAql42r ONENTRY'"/>
+			<assign location="lastEnabled" expr="true"/>
+			<if cond="lastEnabled">
+				<sf:disconnect/>
+				<else/>
+				<sf:log expr="'sf:disconnect::if-node-c_pGGbBwyas79ctAql42r SKIPPED; enabled expression evaluated false.'"/>
+			</if>
+		</onentry>
+		<transition event="module.complete" target="if-node-lJBKPkpbSIGT4vu3Kk1jt">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.disconnect" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.error" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<onexit>
+			<sf:log expr="'sf:disconnect::if-node-c_pGGbBwyas79ctAql42r ONEXIT'"/>
+		</onexit>
+	</state>
+	<state id="if-node-7BRdOU9rc21HxKpieqFFW" metadata="{&quot;name&quot;:&quot;&quot;,&quot;x&quot;:2256,&quot;y&quot;:0}">
+		<onentry>
+			<assign location="nodeName" expr="''"/>
+			<sf:log expr="'sf:filOffer::if-node-7BRdOU9rc21HxKpieqFFW ONENTRY'"/>
+			<assign location="lastEnabled" expr="true"/>
+			<if cond="lastEnabled">
+				<sf:filOffer src="" srcexpr="" namelist="" result="lastResult"/>
+				<else/>
+				<sf:log expr="'sf:filOffer::if-node-7BRdOU9rc21HxKpieqFFW SKIPPED; enabled expression evaluated false.'"/>
+			</if>
+		</onentry>
+		<transition event="module.complete" target="if-node-c_pGGbBwyas79ctAql42r">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.disconnect" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<transition event="module.error" target="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;refTarget&quot;:&quot;if-node-lJBKPkpbSIGT4vu3Kk1jt-ref-boJnOon3jN0Qufx3R5_eG&quot;}">
+			<assign location="lastEvent" expr="_event"/>
+		</transition>
+		<onexit>
+			<sf:log expr="'sf:filOffer::if-node-7BRdOU9rc21HxKpieqFFW ONEXIT'"/>
+		</onexit>
+	</state>
+	<final id="if-node-lJBKPkpbSIGT4vu3Kk1jt" metadata="{&quot;x&quot;:2808,&quot;y&quot;:0}">
+		<onentry>
+			<assign location="nodeName" expr="''"/>
+			<sf:log expr="'Final::if-node-lJBKPkpbSIGT4vu3Kk1jt ONENTRY'"/>
+			<assign location="lastEnabled" expr="true"/>
+			<if cond="lastEnabled">
+				<sf:assignResult name="ReturnParam" srcexpr="true"/>
+				<else/>
+				<sf:log expr="'Final::if-node-lJBKPkpbSIGT4vu3Kk1jt SKIPPED; enabled expression evaluated false.'"/>
+			</if>
+		</onentry>
+		<onexit>
+			<sf:log expr="'Final::if-node-lJBKPkpbSIGT4vu3Kk1jt ONEXIT'"/>
+		</onexit>
+	</final>
+	<state id="if-node-wG5oRZSz35x1mSGXSfyhi" metadata="{&quot;x&quot;:276,&quot;y&quot;:0,&quot;nodeType&quot;:&quot;Branch&quot;}">
+		<datamodel>
+			<data id="branchLabel"/>
+		</datamodel>
+		<onentry>
+			<assign location="nodeName" expr="''"/>
+			<sf:log expr="'sf:branch::if-node-wG5oRZSz35x1mSGXSfyhi ONENTRY'"/>
+		</onentry>
+		<transition cond="true" target="if-node-vMJ4ZrUyJTjfBGbFZQpAU" metadata="{&quot;label&quot;:&quot;Condition&quot;}">
+			<assign location="branchLabel" expr="'Condition'"/>
+		</transition>
+		<transition target="if-node-ycM48NwqkuHjamQVlgEM1" metadata="{&quot;refTarget&quot;:&quot;if-node-ycM48NwqkuHjamQVlgEM1-ref-kcFpJDlOGYGpsRiLLnddT&quot;}">
+			<assign location="branchLabel" expr="''"/>
+		</transition>
+		<onexit>
+			<sf:log expr="'sf:branch::if-node-wG5oRZSz35x1mSGXSfyhi ONEXIT'"/>
+		</onexit>
+	</state>
+</scxml>

@@ -23,8 +23,8 @@ const configFilePath = resolve(process.cwd(), configFilePathArgument);
 const projectRoot = dirname(configFilePath);
 const config = JSON.parse(await readFile(configFilePath));
 
+const devDirectory = join(projectRoot, config.paths.dev);
 const snapshotsDirectory = join(projectRoot, config.paths.snapshots);
-const outputDirectory = join(projectRoot, config.paths.out);
 // Keep temporary modules in the flow project so Node resolves that project's
 // dependencies and package.json "imports" aliases (for example, #modules).
 const temporaryDirectory = join(projectRoot, ".jsx-scxml-export");
@@ -32,10 +32,10 @@ await rm(temporaryDirectory, { recursive: true, force: true });
 await mkdir(temporaryDirectory, { recursive: true });
 
 try {
-  const flowFiles = await findFlowFiles(snapshotsDirectory);
+  const flowFiles = await findFlowFiles(devDirectory);
   if (flowFiles.length === 0) {
     console.log(
-      `No .ts or .tsx flow modules found in ${relative(projectRoot, snapshotsDirectory)}.`,
+      `No .ts or .tsx flow modules found in ${relative(projectRoot, devDirectory)}.`,
     );
     process.exitCode = 1;
   } else {
@@ -55,7 +55,7 @@ try {
       process.exitCode = 1;
     } else {
       console.log(
-        `Exported ${flowFiles.length} flow${flowFiles.length === 1 ? "" : "s"} to ${relative(projectRoot, outputDirectory)}.`,
+        `Exported ${flowFiles.length} flow${flowFiles.length === 1 ? "" : "s"} to ${relative(projectRoot, snapshotsDirectory)}.`,
       );
     }
   }
@@ -65,7 +65,7 @@ try {
 
 async function exportFlow(sourcePath) {
   const source = await readFile(sourcePath, "utf8");
-  const relativePath = relative(snapshotsDirectory, sourcePath);
+  const relativePath = relative(devDirectory, sourcePath);
   const compiledPath = join(
     temporaryDirectory,
     relativePath.replace(/\.(?:tsx?|mts|cts)$/, ".mjs"),
@@ -106,7 +106,7 @@ async function exportFlow(sourcePath) {
   }
 
   const destinationPath = join(
-    outputDirectory,
+    snapshotsDirectory,
     dirname(relativePath),
     `${basename(relativePath, extname(relativePath))}.scxml`,
   );
