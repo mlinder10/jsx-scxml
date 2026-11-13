@@ -12,7 +12,8 @@ export {
   Script,
   SetIntent,
 } from "./actions.js";
-export { CommentNode } from "./comments.js";
+export { CommentNode, ReferenceNode } from "./comments.js";
+export { defineNodes, finalNode, node, refNode } from "./transition.js";
 export {
   defaultMetadata,
   quoteJexlString,
@@ -20,6 +21,15 @@ export {
 } from "./types.js";
 export type * from "./types.js";
 export type { FlowProps } from "./flow.js";
+export type {
+  FlowGraph,
+  NodeKind,
+  NodeOptions,
+  NodeRef,
+  ReferenceNodeOptions,
+  ReferenceNodeRef,
+  TransitionProps,
+} from "./transition.js";
 export type { ReturnProps, StdBaseNodeProps } from "./node.js";
 export type {
   AnnouncementProps,
@@ -33,4 +43,9 @@ export type {
   ScriptProps,
   SetIntentProps,
 } from "./actions.js";
-export type { CommentProps } from "./comments.js";
+export type {
+  CommentMetadata,
+  CommentProps,
+  ReferenceMetadata,
+  ReferenceNodeProps,
+} from "./comments.js";

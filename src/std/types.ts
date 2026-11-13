@@ -1,19 +1,36 @@
 import type { ScxmlChild } from "../core/ast.js";
 import type { Jexl } from "../jexl/index.js";
+import type { NodeRef } from "./transition.js";
 
 export type Position = {
   readonly x: number;
   readonly y: number;
 };
 
+export type LoggingPrefix =
+  | "sf:announcement"
+  | "sf:script"
+  | "sf:branch"
+  | "sf:module"
+  | "sf:intent"
+  | "sf:language"
+  | "sf:assignResult"
+  | "sf:disconnect"
+  | "sf:filOffer"
+  | "State"
+  | "Final";
+
 export type KnownNodeType =
   | "Announcement"
+  | "Script"
   | "Branch"
-  | "FILOffer"
-  | "Intent"
   | "Module"
-  | "Return"
-  | "Script";
+  | "Intent"
+  | "Language"
+  | "Result"
+  | "Disconnect"
+  | "FILOffer"
+  | "Return";
 
 /** Allows editor-specific node types while documenting the built-in vocabulary. */
 export type NodeType = KnownNodeType | (string & {});
@@ -27,15 +44,14 @@ export type Metadata = {
 };
 
 export type NodeProps = {
-  readonly id: string;
-  readonly metadata?: Metadata;
+  readonly node: NodeRef;
   readonly enable?: Jexl;
   readonly beforeScript?: Jexl;
   readonly afterScript?: Jexl;
   readonly onExit?: Jexl;
   /** Omit for terminal nodes that do not dispatch `module.complete`. */
-  readonly to?: string;
-};
+  readonly to?: NodeRef;
+} & Metadata;
 
 /** Exactly one source mode must be provided by components that invoke a resource. */
 export type StaticSource = {
@@ -50,8 +66,10 @@ export type DynamicSource = {
 
 export type Source = StaticSource | DynamicSource;
 
-export function defaultMetadata(nodeType: NodeType): Metadata {
-  return { name: "", nodeType, x: 0, y: 0 };
+export function defaultMetadata(nodeType: NodeType | null): Metadata {
+  return nodeType === null
+    ? { name: "", x: 0, y: 0 }
+    : { name: "", x: 0, y: 0, nodeType };
 }
 
 export function serializeMetadata(metadata: Metadata): string {
@@ -65,3 +83,17 @@ export function quoteJexlString(value: string): Jexl {
 export type NodeChildren = {
   readonly children?: ScxmlChild;
 };
+
+export const STD_TYPE_TO_LOGGING_PREFIX: Record<KnownNodeType, LoggingPrefix> =
+  {
+    Announcement: "sf:announcement",
+    Script: "sf:script",
+    Branch: "sf:branch",
+    Module: "sf:module",
+    Intent: "sf:intent",
+    Language: "sf:language",
+    Result: "sf:assignResult",
+    Disconnect: "sf:disconnect",
+    FILOffer: "sf:filOffer",
+    Return: "Final",
+  };

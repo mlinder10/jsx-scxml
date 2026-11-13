@@ -2,8 +2,27 @@ type XmlNode = {
   readonly name: string;
   readonly attributes: Readonly<Record<string, string>>;
   readonly children: XmlNode[];
+  readonly comments: string[];
   readonly text: string;
 };
+
+type FlowAnnotation =
+  | {
+      readonly kind: "comment";
+      readonly comment: string;
+      readonly position: Position;
+      readonly color?: string;
+      readonly width?: number;
+      readonly height?: number;
+    }
+  | {
+      readonly kind: "reference";
+      readonly id: string;
+      readonly refedNodeID: string;
+      readonly position: Position;
+    };
+
+type Position = { readonly x: number; readonly y: number };
 
 type NodeKind =
   | "Announcement"
@@ -15,7 +34,6 @@ type NodeKind =
   | "Script"
   | "SetIntent";
 
-const DEFAULT_METADATA = { name: "", nodeType: "Script", x: 0, y: 0 };
 const ENTITY_MAP: Readonly<Record<string, string>> = {
   amp: "&",
   apos: "'",
@@ -35,10 +53,28 @@ export function parseScxmlToTsx(flowText: string): string {
   const needs = { module: false, announcement: false, routing: false };
   const dataModel = child(scxml, "datamodel");
   const data = dataModel?.children.filter(({ name }) => name === "data") ?? [];
+  const annotations: FlowAnnotation[] = [];
+  for (const comment of scxml.comments) {
+    const annotation = parseFlowAnnotation(comment);
+    if (annotation) annotations.push(annotation);
+  }
+  const comments = annotations.filter(
+    (annotation): annotation is Extract<FlowAnnotation, { kind: "comment" }> =>
+      annotation.kind === "comment",
+  );
+  if (comments.length > 0) imports.add("CommentNode");
   const nodes = scxml.children.filter(
     ({ name }) => name === "state" || name === "final",
   );
-  const renderedNodes = nodes.map((node) => renderNode(node, imports, needs));
+  const nodeRefs = createNodeRefs(nodes);
+  const refRefs = createReferenceRefs(annotations);
+  imports.add("defineNodes");
+  imports.add("node");
+  imports.add("finalNode");
+  if (refRefs.size > 0) imports.add("refNode");
+  const renderedNodes = nodes.map((node) =>
+    renderNode(node, imports, needs, nodeRefs),
+  );
 
   const stdImports = [...imports].sort().join(",\n  ");
   const sourceImports = [
@@ -48,22 +84,26 @@ export function parseScxmlToTsx(flowText: string): string {
     needs.routing && 'import routing from "#routing" with { type: "json" };',
   ].filter(Boolean);
   const flowProps = [
+    "graph={graph}",
+    comments.length > 0 && `annotations={${renderAnnotations(comments)}}`,
     attribute(scxml, "initial") &&
-      `initial=${quote(attribute(scxml, "initial")!)}`,
+      `initial={${nodeRef(nodeRefs, attribute(scxml, "initial")!)}}`,
     `dataModel={${renderDataModel(data)}}`,
     attribute(scxml, "global-module-disconnect-id") &&
-      `globalModuleDisconnectId=${quote(attribute(scxml, "global-module-disconnect-id")!)}`,
+      `globalModuleDisconnectId={${flowTarget(nodeRefs, refRefs, attribute(scxml, "global-module-disconnect-id")!)}}`,
     attribute(scxml, "global-module-error-id") &&
-      `globalModuleErrorId=${quote(attribute(scxml, "global-module-error-id")!)}`,
-  ].filter(Boolean);
+      `globalModuleErrorId={${flowTarget(nodeRefs, refRefs, attribute(scxml, "global-module-error-id")!)}}`,
+  ].filter((prop): prop is string => Boolean(prop));
 
   return [
     'import { jexl } from "jsx-scxml";',
     `import {\n  ${stdImports},\n} from "jsx-scxml/std";`,
     ...sourceImports,
     "",
+    renderNodesDeclaration(nodes, nodeRefs, annotations, refRefs),
+    "",
     "export default (",
-    `  <Flow\n${flowProps.map((prop) => `    ${prop}`).join("\n")}\n  >`,
+    `  <Flow\n${flowProps.map((prop) => indent(prop, 4)).join("\n")}\n  >`,
     ...renderedNodes.map((node) => indent(node, 4)),
     "  </Flow>",
     ");",
@@ -73,6 +113,107 @@ export function parseScxmlToTsx(flowText: string): string {
 
 /** Backwards-compatible short name for callers that only need the generated TSX. */
 export const parse = parseScxmlToTsx;
+
+function renderNodesDeclaration(
+  nodes: readonly XmlNode[],
+  nodeRefs: ReadonlyMap<string, string>,
+  annotations: readonly FlowAnnotation[],
+  refRefs: ReadonlyMap<string, string>,
+): string {
+  const references = annotations.filter(
+    (
+      annotation,
+    ): annotation is Extract<FlowAnnotation, { kind: "reference" }> =>
+      annotation.kind === "reference",
+  );
+  return [
+    "const graph = defineNodes({",
+    "  nodes: {",
+    ...nodes.map((xmlNode) => {
+      const xmlId = requiredAttribute(xmlNode, "id");
+      const factory = xmlNode.name === "final" ? "finalNode" : "node";
+      return `    ${nodeRefs.get(xmlId)!}: ${factory}({ xmlId: ${quote(xmlId)} }),`;
+    }),
+    "  },",
+    "  refs: {",
+    ...references.map(
+      (annotation) =>
+        `    ${refRefs.get(annotation.id)!}: refNode(${quote(nodeRefs.get(annotation.refedNodeID)!)}, { xmlId: ${quote(annotation.id)}, position: { x: ${annotation.position.x}, y: ${annotation.position.y} } }),`,
+    ),
+    "  },",
+    "});",
+  ].join("\n");
+}
+
+function renderAnnotations(
+  annotations: readonly Extract<FlowAnnotation, { kind: "comment" }>[],
+): string {
+  return [
+    "[",
+    ...annotations.map((annotation) => `  ${renderAnnotation(annotation)},`),
+    "]",
+  ].join("\n");
+}
+
+function renderAnnotation(
+  annotation: Extract<FlowAnnotation, { kind: "comment" }>,
+): string {
+  return `<CommentNode comment=${quote(annotation.comment)} position={{ x: ${annotation.position.x}, y: ${annotation.position.y} }}${annotation.color === undefined ? "" : ` color=${quote(annotation.color)}`}${annotation.width === undefined ? "" : ` width={${annotation.width}}`}${annotation.height === undefined ? "" : ` height={${annotation.height}}`} />`;
+}
+
+function parseFlowAnnotation(value: string): FlowAnnotation | undefined {
+  const separator = value.indexOf("|");
+  if (separator === -1) return undefined;
+  const kind = value.slice(0, separator);
+  if (kind !== "FLOWCOMMENT" && kind !== "REFNODE") return undefined;
+
+  let metadata: unknown;
+  try {
+    metadata = JSON.parse(decodeEntities(value.slice(separator + 1)));
+  } catch {
+    throw new Error(`Invalid ${kind} metadata comment.`);
+  }
+  if (!isRecord(metadata) || !isPosition(metadata.position)) {
+    throw new Error(`Invalid ${kind} metadata comment.`);
+  }
+  if (kind === "FLOWCOMMENT") {
+    if (typeof metadata.comment !== "string")
+      throw new Error("Invalid FLOWCOMMENT metadata comment.");
+    return {
+      kind: "comment",
+      comment: metadata.comment,
+      position: metadata.position,
+      ...(typeof metadata.color === "string" ? { color: metadata.color } : {}),
+      ...(typeof metadata.width === "number" ? { width: metadata.width } : {}),
+      ...(typeof metadata.height === "number"
+        ? { height: metadata.height }
+        : {}),
+    };
+  }
+  if (
+    typeof metadata.id !== "string" ||
+    typeof metadata.refedNodeID !== "string"
+  )
+    throw new Error("Invalid REFNODE metadata comment.");
+  return {
+    kind: "reference",
+    id: metadata.id,
+    refedNodeID: metadata.refedNodeID,
+    position: metadata.position,
+  };
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function isPosition(value: unknown): value is Position {
+  return (
+    isRecord(value) &&
+    typeof value.x === "number" &&
+    typeof value.y === "number"
+  );
+}
 
 function renderDataModel(data: readonly XmlNode[]): string {
   if (data.length === 0) return "{}";
@@ -90,6 +231,7 @@ function renderNode(
   node: XmlNode,
   imports: Set<string>,
   needs: { module: boolean; announcement: boolean; routing: boolean },
+  nodeRefs: ReadonlyMap<string, string>,
 ): string {
   const id = requiredAttribute(node, "id");
   const metadata = readMetadata(node);
@@ -104,18 +246,15 @@ function renderNode(
   ) {
     imports.add("Branch");
     imports.add("BranchTransition");
-    return renderBranch(id, metadata, transitions);
+    return renderBranch(id, metadata, transitions, nodeRefs);
   }
 
   const component = isReturn ? "Return" : (action?.kind ?? "Script");
   imports.add(component);
   const props = [
-    `id=${quote(id)}`,
-    metadataProp(
-      metadata,
-      isReturn ? { ...DEFAULT_METADATA, nodeType: "Return" } : DEFAULT_METADATA,
-    ),
-    ...renderCommonNodeProps(node, transitions, action?.element),
+    `node={${nodeRef(nodeRefs, id)}}`,
+    ...metadataProps(metadata),
+    ...renderCommonNodeProps(node, transitions, action?.element, nodeRefs),
     ...(action ? renderActionProps(action, needs) : []),
   ].filter(Boolean);
 
@@ -126,9 +265,12 @@ function renderBranch(
   id: string,
   metadata: unknown,
   transitions: readonly XmlNode[],
+  nodeRefs: ReadonlyMap<string, string>,
 ): string {
-  const metadataProperty = metadataProp(metadata, DEFAULT_METADATA);
-  const props = [`id=${quote(id)}`, metadataProperty].filter(Boolean).join(" ");
+  const props = [
+    `node={${nodeRef(nodeRefs, id)}}`,
+    ...metadataProps(metadata),
+  ].join(" ");
   return [
     `<Branch ${props}>`,
     ...transitions.map((transition) => {
@@ -140,7 +282,7 @@ function renderBranch(
       return [
         "  <BranchTransition",
         `    label=${quote(unquoteJexl(labelExpression))}`,
-        `    to=${quote(requiredAttribute(transition, "target"))}`,
+        `    to={${nodeRef(nodeRefs, requiredAttribute(transition, "target"))}}`,
         `    cond=${jexl(attribute(transition, "cond") ?? "true")}`,
         script && `    script=${jexl(script.text)}`,
         "  />",
@@ -156,6 +298,7 @@ function renderCommonNodeProps(
   node: XmlNode,
   transitions: readonly XmlNode[],
   actionElement: XmlNode | undefined,
+  nodeRefs: ReadonlyMap<string, string>,
 ): string[] {
   const onEntry = child(node, "onentry");
   const onExit = child(node, "onexit");
@@ -166,7 +309,9 @@ function renderCommonNodeProps(
   const props: string[] = [];
   if (enable && enable !== "true") props.push(`enable=${jexl(enable)}`);
   if (transition)
-    props.push(`to=${quote(requiredAttribute(transition, "target"))}`);
+    props.push(
+      `to={${nodeRef(nodeRefs, requiredAttribute(transition, "target"))}}`,
+    );
 
   const entryScripts = executableEntryScripts(onEntry, actionElement);
   if (entryScripts.length > 0)
@@ -221,7 +366,7 @@ function sourceProps(
   const srcExpr = attribute(element, "srcexpr");
   if (srcExpr) return [`srcExpr=${jexl(srcExpr)}`];
   const src = requiredAttribute(element, "src");
-  return [`src={${resourceReference(namespace, src)}}`];
+  return [`src=${quote(src)}`];
 }
 
 function resourceReference(namespace: string, key: string): string {
@@ -292,13 +437,19 @@ function readMetadata(node: XmlNode): unknown {
   }
 }
 
-function metadataProp(metadata: unknown, fallback: object): string {
-  if (
-    metadata === undefined ||
-    JSON.stringify(metadata) === JSON.stringify(fallback)
-  )
-    return "";
-  return `metadata={${JSON.stringify(metadata)}}`;
+function metadataProps(metadata: unknown): string[] {
+  if (!isRecord(metadata)) return [];
+
+  const props: string[] = [];
+  if (typeof metadata.name === "string")
+    props.push(`name=${quote(metadata.name)}`);
+  if (typeof metadata.nodeType === "string")
+    props.push(`nodeType=${quote(metadata.nodeType)}`);
+  if (typeof metadata.x === "number") props.push(`x={${metadata.x}}`);
+  if (typeof metadata.y === "number") props.push(`y={${metadata.y}}`);
+  if (typeof metadata.overrideError === "boolean")
+    props.push(`overrideError={${metadata.overrideError}}`);
+  return props;
 }
 
 function findAssignExpression(
@@ -326,6 +477,92 @@ function requiredAttribute(node: XmlNode, name: string): string {
     throw new Error(`Expected <${node.name}> to have a ${name} attribute.`);
   return value;
 }
+function createNodeRefs(
+  nodes: readonly XmlNode[],
+): ReadonlyMap<string, string> {
+  const refs = new Map<string, string>();
+  const usedKeys = new Set<string>();
+  for (const xmlNode of nodes) {
+    const xmlId = requiredAttribute(xmlNode, "id");
+    if (refs.has(xmlId))
+      throw new Error(`Duplicate top-level node ID: ${xmlId}.`);
+
+    const baseKey = camelCaseKey(xmlId);
+    let key = baseKey;
+    let suffix = 2;
+    while (usedKeys.has(key)) key = `${baseKey}${suffix++}`;
+    refs.set(xmlId, key);
+    usedKeys.add(key);
+  }
+  return refs;
+}
+
+function createReferenceRefs(
+  annotations: readonly FlowAnnotation[],
+): ReadonlyMap<string, string> {
+  const refs = new Map<string, string>();
+  const usedKeys = new Set<string>();
+  for (const annotation of annotations) {
+    if (annotation.kind !== "reference") continue;
+    if (refs.has(annotation.id))
+      throw new Error(`Duplicate reference node ID: ${annotation.id}.`);
+
+    const baseKey = camelCaseKey(annotation.id);
+    let key = baseKey;
+    let suffix = 2;
+    while (usedKeys.has(key)) key = `${baseKey}${suffix++}`;
+    refs.set(annotation.id, key);
+    usedKeys.add(key);
+  }
+  return refs;
+}
+
+function camelCaseKey(xmlId: string): string {
+  const words = xmlId.match(/[A-Za-z0-9]+/g) ?? [];
+  const key = words
+    .map((word, index) => {
+      const normalized =
+        word === word.toUpperCase() ? word.toLowerCase() : word;
+      return index === 0
+        ? normalized[0]?.toLowerCase() + normalized.slice(1)
+        : normalized[0]?.toUpperCase() + normalized.slice(1);
+    })
+    .join("");
+  const safeKey = key || "node";
+  return /^[A-Za-z_$]/.test(safeKey) && !isUnsafeNodeKey(safeKey)
+    ? safeKey
+    : `node${safeKey[0]?.toUpperCase() ?? ""}${safeKey.slice(1)}`;
+}
+
+function isUnsafeNodeKey(key: string): boolean {
+  return key === "__proto__" || key === "constructor" || key === "prototype";
+}
+
+function nodeRef(nodeRefs: ReadonlyMap<string, string>, xmlId: string): string {
+  const key = nodeRefs.get(xmlId);
+  if (!key) throw new Error(`Unknown top-level node ID: ${xmlId}.`);
+  return `graph.nodes.${key}`;
+}
+
+function referenceRef(
+  refRefs: ReadonlyMap<string, string>,
+  xmlId: string,
+): string {
+  const key = refRefs.get(xmlId);
+  if (!key) throw new Error(`Unknown reference node ID: ${xmlId}.`);
+  return `graph.refs.${key}`;
+}
+
+function flowTarget(
+  nodeRefs: ReadonlyMap<string, string>,
+  refRefs: ReadonlyMap<string, string>,
+  xmlId: string,
+): string {
+  if (nodeRefs.has(xmlId)) return nodeRef(nodeRefs, xmlId);
+  if (refRefs.has(xmlId)) return referenceRef(refRefs, xmlId);
+  return quote(xmlId);
+}
+
 function optionalProp(name: string, value: string | undefined): string {
   return value ? `${name}=${quote(value)}` : "";
 }
@@ -359,12 +596,17 @@ function parseXml(xml: string): XmlNode {
     name: string;
     attributes: Record<string, string>;
     children: XmlNode[];
+    comments: string[];
     text: string;
-  } = { name: "", attributes: {}, children: [], text: "" };
+  } = { name: "", attributes: {}, children: [], comments: [], text: "" };
   const stack = [root];
   const tokens = xml.match(/<!--[\s\S]*?-->|<\?[^]*?\?>|<[^>]+>|[^<]+/g) ?? [];
   for (const token of tokens) {
-    if (token.startsWith("<?") || token.startsWith("<!--")) continue;
+    if (token.startsWith("<?")) continue;
+    if (token.startsWith("<!--")) {
+      stack[stack.length - 1].comments.push(token.slice(4, -3));
+      continue;
+    }
     if (token.startsWith("</")) {
       if (stack.length === 1) throw new Error("Unexpected XML closing tag.");
       stack.pop();
@@ -379,6 +621,7 @@ function parseXml(xml: string): XmlNode {
         name: match[1],
         attributes: parseAttributes(match[2]),
         children: [],
+        comments: [],
         text: "",
       };
       stack[stack.length - 1].children.push(node);

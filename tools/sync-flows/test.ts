@@ -3,14 +3,16 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseScxmlToTsx } from "./parser.js";
 
+const FLOW_NAME = "base";
+
 const toolDirectory = dirname(fileURLToPath(import.meta.url));
 export const testScxmlPath = resolve(
   toolDirectory,
-  "../../example/out/test-snapshot/test.scxml",
+  `../../example/out/test-snapshot/${FLOW_NAME}.scxml`,
 );
 export const testTsxPath = resolve(
   toolDirectory,
-  "../../example/snapshots/test-snapshot/test.tsx",
+  `../../example/snapshots/test-snapshot/${FLOW_NAME}.tsx`,
 );
 
 /** Regenerates the TSX fixture from the matching exported SCXML fixture. */

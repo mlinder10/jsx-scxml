@@ -1,24 +1,24 @@
 /** @jsxImportSource jsx-scxml/swampfox */
 
+import type { Jexl } from "../jexl/index.js";
 import type { ScxmlChild } from "../core/ast.js";
-import type { NodeProps } from "./types.js";
+import type { KnownNodeType, Metadata, NodeProps } from "./types.js";
 import {
-  defaultMetadata,
   quoteJexlString,
   serializeMetadata,
+  STD_TYPE_TO_LOGGING_PREFIX,
 } from "./types.js";
 
 export type StdBaseNodeProps = Omit<NodeProps, "to"> & {
   readonly isBranch?: boolean;
   readonly isReturn?: boolean;
   readonly children?: ScxmlChild;
-  readonly to?: string;
+  readonly to?: NodeProps["to"];
 };
 
 type NodeWrapperProps = {
   readonly id: string;
-  readonly metadata:
-    ReturnType<typeof defaultMetadata> | NonNullable<NodeProps["metadata"]>;
+  readonly metadata: Metadata;
   readonly isReturn: boolean;
   readonly children?: ScxmlChild;
 };
@@ -32,14 +32,19 @@ function NodeWrapper({ id, metadata, isReturn, children }: NodeWrapperProps) {
   );
 }
 
+const NODE_NAMES_REQUIRED_IN_METADATA: KnownNodeType[] = [
+  "Branch",
+  "Script",
+  "Result",
+];
+
 /**
  * Shared state/final-state wrapper used by standard Swampfox flow nodes.
  * Its children are executable on-entry content; transitions are intentionally
  * left to specialized node components such as Branch.
  */
 export function StdBaseNode({
-  id,
-  metadata,
+  node,
   enable,
   beforeScript,
   afterScript,
@@ -48,19 +53,35 @@ export function StdBaseNode({
   isReturn = false,
   children,
   to,
+  // Metadata
+  name,
+  nodeType,
+  x,
+  y,
+  overrideError,
 }: StdBaseNodeProps) {
-  const resolvedMetadata =
-    metadata ?? defaultMetadata(isReturn ? "Return" : "Script");
-  const loggingPrefix = isReturn ? "Final" : "State";
+  const metadata =
+    nodeType !== undefined &&
+    NODE_NAMES_REQUIRED_IN_METADATA.includes(nodeType as KnownNodeType)
+      ? { name, nodeType, x, y, overrideError }
+      : { name, x, y, overrideError };
+  const loggingPrefix = nodeType
+    ? (STD_TYPE_TO_LOGGING_PREFIX[nodeType as KnownNodeType] ?? "State")
+    : "State";
 
   return (
-    <NodeWrapper id={id} metadata={resolvedMetadata} isReturn={isReturn}>
+    <NodeWrapper id={node.id} metadata={metadata} isReturn={isReturn}>
+      {nodeType === "Branch" && (
+        <datamodel>
+          <data id="branchLabel" />
+        </datamodel>
+      )}
       <onentry>
         <assign
           location="nodeName"
-          expr={quoteJexlString(resolvedMetadata.name ?? "")}
+          expr={quoteJexlString(metadata.name ?? "")}
         />
-        <sf:log expr={`'${loggingPrefix}::${id} ONENTRY'`} />
+        <sf:log expr={`'${loggingPrefix}::${node.id} ONENTRY'`} />
         <assign location="lastEnabled" expr={enable ?? "true"} />
         <if cond="lastEnabled">
           {beforeScript && <script>{beforeScript}</script>}
@@ -68,7 +89,7 @@ export function StdBaseNode({
           {afterScript && <script>{afterScript}</script>}
           <else />
           <sf:log
-            expr={`'${loggingPrefix}::${id} SKIPPED; enabled expression evaluated false.'`}
+            expr={`'${loggingPrefix}::${node.id} SKIPPED; enabled expression evaluated false.'`}
           />
         </if>
       </onentry>
@@ -76,13 +97,13 @@ export function StdBaseNode({
       {isBranch && children}
 
       {!isBranch && to && (
-        <transition event="module.complete" target={to}>
+        <transition event="module.complete" target={to.id}>
           <assign location="lastEvent" expr="_event" />
         </transition>
       )}
 
       <onexit>
-        <sf:log expr={`'${loggingPrefix}::${id} ONEXIT'`} />
+        <sf:log expr={`'${loggingPrefix}::${node.id} ONEXIT'`} />
         {onExit && (
           <if cond="lastEnabled">
             <script>{onExit}</script>
@@ -93,8 +114,17 @@ export function StdBaseNode({
   );
 }
 
-export type ReturnProps = Omit<NodeProps, "to">;
+export type ReturnProps = Omit<NodeProps, "to"> & {
+  readonly results?: Readonly<Record<string, Jexl>>;
+};
 
-export function Return(props: ReturnProps) {
-  return <StdBaseNode {...props} isReturn />;
+export function Return({ results, ...props }: ReturnProps) {
+  return (
+    <StdBaseNode nodeType="Return" {...props} isReturn>
+      {results &&
+        Object.entries(results).map(([name, source]) => (
+          <sf:assignResult key={name} name={name} srcexpr={source} />
+        ))}
+    </StdBaseNode>
+  );
 }

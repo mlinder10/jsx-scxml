@@ -35,6 +35,8 @@ function serializeNode(
   if (node.kind === "text") return escapeText(node.value);
 
   const prefix = pretty ? indent.repeat(depth) : "";
+  if (node.kind === "comment")
+    return `${prefix}<!--${escapeComment(node.value)}-->`;
   const attributes = serializeAttributes(node);
   if (node.children.length === 0)
     return `${prefix}<${node.name}${attributes}/>`;
@@ -73,5 +75,12 @@ function escapeText(value: string): string {
 }
 
 function escapeAttribute(value: string): string {
-  return escapeText(value).replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+  return escapeText(value).replace(/"/g, "&quot;");
+}
+
+function escapeComment(value: string): string {
+  if (value.includes("--") || value.endsWith("-")) {
+    throw new Error("XML comment content cannot contain '--' or end with '-'.");
+  }
+  return value;
 }

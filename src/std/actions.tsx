@@ -2,6 +2,7 @@
 
 import type { Jexl } from "../jexl/index.js";
 import { StdBaseNode } from "./node.js";
+import type { TransitionProps } from "./transition.js";
 import type { NodeProps, Source } from "./types.js";
 
 export type ScriptProps = NodeProps & {
@@ -12,7 +13,7 @@ export type ScriptProps = NodeProps & {
 
 export function Script({ inline, src, srcExpr, ...props }: ScriptProps) {
   return (
-    <StdBaseNode {...props}>
+    <StdBaseNode nodeType="Script" {...props}>
       {srcExpr && <sf:script src="" srcexpr={srcExpr} />}
       {inline && <script>{inline}</script>}
       {src && <script src={src} />}
@@ -26,7 +27,7 @@ export type AssignResultsProps = NodeProps & {
 
 export function AssignResults({ results, ...props }: AssignResultsProps) {
   return (
-    <StdBaseNode {...props}>
+    <StdBaseNode nodeType="Assign" {...props}>
       {Object.entries(results).map(([name, source]) => (
         <sf:assignResult key={name} name={name} srcexpr={source} />
       ))}
@@ -40,7 +41,7 @@ export type LanguageProps = NodeProps & {
 
 export function Language({ language, ...props }: LanguageProps) {
   return (
-    <StdBaseNode {...props}>
+    <StdBaseNode nodeType="Language" {...props}>
       <sf:language src={language} />
     </StdBaseNode>
   );
@@ -50,7 +51,7 @@ export type AnnouncementProps = NodeProps & Source;
 
 export function Announcement({ src, srcExpr, ...props }: AnnouncementProps) {
   return (
-    <StdBaseNode {...props}>
+    <StdBaseNode nodeType="Announcement" {...props}>
       <sf:announcement src={src ?? ""} srcexpr={srcExpr ?? ""} />
     </StdBaseNode>
   );
@@ -68,7 +69,7 @@ export function SetIntent({
   ...props
 }: SetIntentProps) {
   return (
-    <StdBaseNode {...props}>
+    <StdBaseNode nodeType="Intent" {...props}>
       <sf:intent
         src={src ?? ""}
         srcexpr={srcExpr ?? ""}
@@ -82,7 +83,7 @@ export type DisconnectProps = NodeProps;
 
 export function Disconnect(props: DisconnectProps) {
   return (
-    <StdBaseNode {...props}>
+    <StdBaseNode nodeType="Disconnect" {...props}>
       <sf:disconnect />
     </StdBaseNode>
   );
@@ -104,7 +105,7 @@ export function Module({
   ...props
 }: ModuleProps) {
   return (
-    <StdBaseNode {...props}>
+    <StdBaseNode nodeType="Module" {...props}>
       <sf:module
         src={src ?? ""}
         srcexpr={srcExpr ?? ""}
@@ -125,7 +126,7 @@ export function FILOffer({
   ...props
 }: FILOfferProps) {
   return (
-    <StdBaseNode {...props}>
+    <StdBaseNode nodeType="FILOffer" {...props}>
       <sf:filOffer
         src={src ?? ""}
         srcexpr={srcExpr ?? ""}
@@ -143,18 +144,13 @@ export type BranchProps = Omit<NodeProps, "to"> & {
 
 export function Branch({ children, ...props }: BranchProps) {
   return (
-    <StdBaseNode {...props} isBranch>
+    <StdBaseNode nodeType="Branch" {...props} isBranch>
       {children}
     </StdBaseNode>
   );
 }
 
-export type BranchTransitionProps = {
-  label: string;
-  cond: Jexl;
-  to: string;
-  script?: Jexl;
-};
+export type BranchTransitionProps = TransitionProps;
 
 export function BranchTransition({
   label,
@@ -162,8 +158,10 @@ export function BranchTransition({
   to,
   script,
 }: BranchTransitionProps) {
+  const transitionProps =
+    cond === "Else" ? { target: to.id } : { cond, target: to.id };
   return (
-    <transition cond={cond} target={to}>
+    <transition {...transitionProps} metadata={JSON.stringify({ label })}>
       <assign location="branchLabel" expr={`'${label}'`} />
       {script && <script>{script}</script>}
     </transition>

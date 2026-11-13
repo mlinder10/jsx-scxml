@@ -32,7 +32,7 @@ describe("JSX SCXML runtime", () => {
   </state>
   <state id="running">
     <onentry>
-      <log label="Lifecycle" expr="&apos;Started&apos;"/>
+      <log label="Lifecycle" expr="'Started'"/>
     </onentry>
     <transition event="STOP" target="idle"/>
   </state>

@@ -48,7 +48,13 @@ export interface ScxmlText {
   readonly value: string;
 }
 
-export type ScxmlNode = ScxmlElement | ScxmlText;
+/** An XML comment, including its content but excluding `<!--` and `-->`. */
+export interface ScxmlComment {
+  readonly kind: "comment";
+  readonly value: string;
+}
+
+export type ScxmlNode = ScxmlElement | ScxmlText | ScxmlComment;
 export type ScxmlChild =
   | ScxmlNode
   | string

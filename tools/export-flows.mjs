@@ -111,11 +111,7 @@ async function exportFlow(sourcePath) {
     `${basename(relativePath, extname(relativePath))}.scxml`,
   );
   await mkdir(dirname(destinationPath), { recursive: true });
-  await writeFile(
-    destinationPath,
-    serialize(document, { xmlDeclaration: true }),
-    "utf8",
-  );
+  await writeFile(destinationPath, serialize(document), "utf8");
   console.log(
     `${relative(projectRoot, sourcePath)} -> ${relative(projectRoot, destinationPath)}`,
   );

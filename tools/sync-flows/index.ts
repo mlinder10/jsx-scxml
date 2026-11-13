@@ -21,8 +21,8 @@ if (
 
 const configFilePath = resolve(process.cwd(), configFilePathArgument);
 const projectRoot = dirname(configFilePath);
-const config = JSON.parse(await readFile(configFilePath));
+// const config = JSON.parse(await readFile(configFilePath));
 
-const snapshotsDirectory = join(projectRoot, config.paths.snapshots);
-const postgresUrl = config.origin.postgresUrl;
+// const snapshotsDirectory = join(projectRoot, config.paths.snapshots);
+// const postgresUrl = config.origin.postgresUrl;
 // TODO: read snapshots from db, parse scxml and write as tsx

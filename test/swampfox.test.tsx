@@ -34,7 +34,7 @@ describe("Swampfox dialect", () => {
 
     const xml = serialize(document);
     expect(xml).toContain(`xmlns:sf="${SWAMPFOX_NAMESPACE}"`);
-    expect(xml).toContain('<sf:log expr="&apos;Starting&apos;"/>');
+    expect(xml).toContain("<sf:log expr=\"'Starting'\"/>");
     expect(xml).toContain(
       '<sf:intent src="" srcexpr="session.lastIntent" immediate="false"/>',
     );

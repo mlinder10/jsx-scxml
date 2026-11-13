@@ -1,4 +1,8 @@
+import type { ScxmlComment } from "../core/ast.js";
 import type { Position } from "./types.js";
+import type { ReferenceNodeRef } from "./transition.js";
+
+// MARK: Comment
 
 export type CommentProps = {
   readonly comment: string;
@@ -8,7 +12,7 @@ export type CommentProps = {
   readonly height?: number;
 };
 
-type CommentMetadata = {
+export type CommentMetadata = {
   readonly comment: string;
   readonly position: Position;
   readonly color: string;
@@ -17,8 +21,7 @@ type CommentMetadata = {
 };
 
 /**
- * Produces the Swampfox flow-comment payload. A comment AST node is still
- * required before this can be emitted as an XML comment by the serializer.
+ * Produces a Swampfox flow comment as an XML comment AST node.
  */
 export function CommentNode({
   comment,
@@ -26,7 +29,28 @@ export function CommentNode({
   color = "#FFC",
   width = 0,
   height = 0,
-}: CommentProps): string {
+}: CommentProps): ScxmlComment {
   const value: CommentMetadata = { comment, position, color, width, height };
-  return `<!--FLOWCOMMENT|${JSON.stringify(value)}-->`;
+  return { kind: "comment", value: `FLOWCOMMENT|${JSON.stringify(value)}` };
+}
+
+// MARK: Reference
+
+export type ReferenceNodeProps = {
+  readonly ref: ReferenceNodeRef;
+};
+
+export type ReferenceMetadata = {
+  readonly id: string;
+  readonly refedNodeID: string;
+  readonly position: Position;
+};
+
+export function ReferenceNode({ ref }: ReferenceNodeProps): ScxmlComment {
+  const value: ReferenceMetadata = {
+    id: ref.id,
+    refedNodeID: ref.referencedNode.id,
+    position: ref.position,
+  };
+  return { kind: "comment", value: `REFNODE|${JSON.stringify(value)}` };
 }
