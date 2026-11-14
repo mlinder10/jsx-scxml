@@ -8,9 +8,9 @@ const temporaryDirectories: string[] = [];
 
 afterEach(async () => {
   await Promise.all(
-    temporaryDirectories.splice(0).map((directory) =>
-      rm(directory, { recursive: true, force: true }),
-    ),
+    temporaryDirectories
+      .splice(0)
+      .map((directory) => rm(directory, { recursive: true, force: true })),
   );
 });
 
@@ -23,7 +23,10 @@ async function createTemporaryDirectory() {
 describe("initializeProject", () => {
   it("creates a complete project with valid, consistent JSON", async () => {
     const workingDirectory = await createTemporaryDirectory();
-    const projectDirectory = await initializeProject("example-flow", workingDirectory);
+    const projectDirectory = await initializeProject(
+      "example-flow",
+      workingDirectory,
+    );
 
     const packageJson = JSON.parse(
       await readFile(join(projectDirectory, "package.json"), "utf8"),
@@ -36,13 +39,19 @@ describe("initializeProject", () => {
     );
 
     expect(packageJson.name).toBe("example-flow");
+    expect(packageJson.scripts["compile-flows"]).toBe(
+      "jsx-scxml --compile-flows --config ./icx.config.json",
+    );
+    expect(packageJson.scripts["sync-flows"]).toBe(
+      "jsx-scxml --sync-flows --config ./icx.config.json",
+    );
     expect(tsconfig.compilerOptions.paths["#announcements"]).toEqual([
       "./announcements.json",
     ]);
     expect(config.paths.announcements).toBe("./announcements.json");
-    await expect(readFile(join(projectDirectory, "modules.json"), "utf8")).resolves.toBe(
-      "[]\n",
-    );
+    await expect(
+      readFile(join(projectDirectory, "modules.json"), "utf8"),
+    ).resolves.toBe("[]\n");
   });
 
   it("does not overwrite an existing project directory", async () => {
@@ -54,16 +63,16 @@ describe("initializeProject", () => {
     await expect(
       initializeProject("existing-project", workingDirectory),
     ).rejects.toMatchObject({ code: "EEXIST" });
-    await expect(readFile(join(projectDirectory, "package.json"), "utf8")).resolves.toBe(
-      "preserve me",
-    );
+    await expect(
+      readFile(join(projectDirectory, "package.json"), "utf8"),
+    ).resolves.toBe("preserve me");
   });
 
   it("rejects names that could write outside the working directory", async () => {
     const workingDirectory = await createTemporaryDirectory();
 
-    await expect(initializeProject("../outside", workingDirectory)).rejects.toThrow(
-      "Project name must",
-    );
+    await expect(
+      initializeProject("../outside", workingDirectory),
+    ).rejects.toThrow("Project name must");
   });
 });

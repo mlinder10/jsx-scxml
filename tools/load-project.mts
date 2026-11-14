@@ -1,14 +1,7 @@
-#!/usr/bin/env node
-import {
-  buildLocalProjectPaths,
-  getConfigArgument,
-  loadConfigFile,
-} from "./shared.mts";
+import { loadConfigFile } from "./shared.mts";
 
-const configPathArg = getConfigArgument("jsx-scxml-load-project");
-const { projectRoot, config } = await loadConfigFile(configPathArg);
-const { snapshots, scripts, modules, routing, announcements } =
-  buildLocalProjectPaths(projectRoot, config);
-const postgresUrl = config.origin.postgresUrl;
-
-// TODO: read postgres db and write data to files
+export async function loadProject(configPath: string) {
+  await loadConfigFile(configPath);
+  // Database loading has not been implemented yet.
+  throw new Error("Loading projects from PostgreSQL is not implemented yet.");
+}

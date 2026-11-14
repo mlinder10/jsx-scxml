@@ -2,22 +2,6 @@ import { readFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { z } from "zod";
 
-export function getConfigArgument(toolName: string) {
-  const [configFilePathArgument] = process.argv.slice(2);
-
-  if (
-    !configFilePathArgument ||
-    configFilePathArgument === "--help" ||
-    configFilePathArgument === "-h"
-  ) {
-    console.error(`Usage: ${toolName} <config-path>`);
-    console.error(`       npx ${toolName} <config-path>`);
-    process.exit(configFilePathArgument ? 0 : 1);
-  }
-
-  return configFilePathArgument;
-}
-
 export type ConfigFile = z.infer<typeof ConfigFileSchema>;
 
 export const ConfigFileSchema = z.object({

@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "compile-flows": "jsx-scxml-compile-flows ./icx.config.json",
+    "compile-flows": "jsx-scxml --compile-flows --config ./icx.config.json",
+    "sync-flows": "jsx-scxml --sync-flows --config ./icx.config.json",
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {

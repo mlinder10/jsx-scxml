@@ -41,22 +41,23 @@
   },
   "files": [
     "dist",
-    "tools/compile-flows.mts",
-    "tools/initialize-project.mts"
+    "tools/*.mts",
+    "tools/sync-flows/index.ts",
+    "tools/sync-flows/parser.ts"
   ],
   "bin": {
-    "jsx-scxml-compile-flows": "./tools/compile-flows.mts",
-    "jsx-scxml-init": "./tools/initialize-project.mts"
+    "jsx-scxml": "./tools/cli.mts"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "init": "npm run build && node ./tools/initialize-project.mts",
+    "cli": "npm run build && node ./tools/cli.mts",
     "sync-flows:test": "vitest run tools/sync-flows/test.test.ts",
-    "compile-flows": "npm run build && node ./tools/compile-flows.mts",
-    "load-project": "npm run build && node ./tools/load-project.mts"
+    "compile-flows": "npm run cli -- --compile-flows",
+    "sync-flows": "npm run cli -- --sync-flows",
+    "load-project": "npm run cli -- --load-project"
   },
   "dependencies": {
     "typescript": "^5.7.3",

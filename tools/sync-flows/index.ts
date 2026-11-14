@@ -1,26 +1,31 @@
-#!/usr/bin/env node
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import {
-  buildLocalProjectPaths,
-  getConfigArgument,
-  loadConfigFile,
-} from "../shared.mts";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { parseScxmlToTsx } from "./parser";
+import { buildLocalProjectPaths, loadConfigFile } from "../shared.mts";
+import { parseScxmlToTsx } from "./parser.ts";
 
-const configPathArg = getConfigArgument("jsx-scxml-sync-flows");
-const { projectRoot, config } = await loadConfigFile(configPathArg);
-const { snapshots, dev } = buildLocalProjectPaths(projectRoot, config);
+export async function syncFlows(configPath: string) {
+  const { projectRoot, config } = await loadConfigFile(configPath);
+  const { snapshots, dev } = buildLocalProjectPaths(projectRoot, config);
 
-// TODO: loop through snapshots directory, then loop through each flow and write to dev directory
-for (const snapshotName in []) {
-  await mkdir(dirname(join(dev, snapshotName)), { recursive: true });
+  async function syncDirectory(relativePath: string) {
+    const entries = await readdir(join(snapshots, relativePath), {
+      withFileTypes: true,
+    });
 
-  for (const flowName in []) {
-    const scxmlPath = join(snapshots, snapshotName, flowName);
-    const tsxPath = join(dev, snapshotName, flowName);
-    const scxml = await readFile(scxmlPath, "utf8");
-    const tsx = parseScxmlToTsx(scxml);
-    await writeFile(tsxPath, tsx, "utf8");
+    for (const entry of entries) {
+      const entryPath = join(relativePath, entry.name);
+      if (entry.isDirectory()) {
+        await syncDirectory(entryPath);
+      } else if (entry.isFile() && entry.name.endsWith(".scxml")) {
+        const scxml = await readFile(join(snapshots, entryPath), "utf8");
+        const tsx = parseScxmlToTsx(scxml);
+        const tsxPath = join(dev, entryPath.replace(/\.scxml$/, ".tsx"));
+        await mkdir(dirname(tsxPath), { recursive: true });
+        await writeFile(tsxPath, tsx, "utf8");
+        console.log(tsxPath);
+      }
+    }
   }
+
+  await syncDirectory("");
 }

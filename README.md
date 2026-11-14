@@ -39,12 +39,42 @@ const machine = (
 );
 
 const result = validate(machine);
-if (!result.valid) throw new Error(result.diagnostics.map((item) => item.message).join("\n"));
+if (!result.valid)
+  throw new Error(result.diagnostics.map((item) => item.message).join("\n"));
 
 const xml = serialize(machine, { xmlDeclaration: true });
 ```
 
 `expr` marks SCXML data-model source explicitly, keeping it distinct from JavaScript values. Plain strings are also accepted when expression source is already available.
+
+## Command-line tools
+
+Use the single `jsx-scxml` command with exactly one operation:
+
+```sh
+npx jsx-scxml --init my-project
+npx jsx-scxml --compile-flows --config ./icx.config.json
+npx jsx-scxml --sync-flows --config ./icx.config.json
+npx jsx-scxml --help
+```
+
+`--compile-flows` converts the configured `dev` directory's TS/TSX flows to
+SCXML in `snapshots`. `--sync-flows` converts SCXML snapshots back to TSX in
+`dev`. Both preserve nested directory structure and overwrite matching output
+files, so commit or back up hand-edited flows before syncing.
+
+`--config` (or `-c`) defaults to `./icx.config.json`. Configured paths are relative
+to the config file. `--load-project` is reserved for PostgreSQL loading and
+currently reports that it is not implemented.
+
+When working in this repository, use `npm run cli -- --help` or, for example,
+`npm run cli -- --compile-flows --config ./example/icx.config.json`.
+The command runs the TypeScript tool sources directly and requires a Node.js
+version with native TypeScript support (Node.js 22.18+ or 24+).
+
+This replaces the separate `jsx-scxml-init` and `jsx-scxml-compile-flows`
+executables; update existing scripts to use the options above. Newly initialized
+projects include scripts using the unified command.
 
 ## Public API
 

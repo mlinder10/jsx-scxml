@@ -1,9 +1,6 @@
-#!/usr/bin/env node
-
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 
-const usage = `Usage: jsx-scxml-init <project-name>\n       npx jsx-scxml-init <project-name>`;
 const projectNamePattern = /^[a-z0-9][a-z0-9._-]*$/;
 
 export async function initializeProject(
@@ -32,7 +29,8 @@ export async function initializeProject(
       private: true,
       type: "module",
       scripts: {
-        "compile-flows": "jsx-scxml-compile-flows ./icx.config.json",
+        "compile-flows": "jsx-scxml --compile-flows --config ./icx.config.json",
+        "sync-flows": "jsx-scxml --sync-flows --config ./icx.config.json",
         typecheck: "tsc -p tsconfig.json",
       },
       dependencies: {
@@ -87,40 +85,4 @@ export async function initializeProject(
   ]);
 
   return projectDirectory;
-}
-
-async function main() {
-  const arguments_ = process.argv.slice(2);
-  const [projectName] = arguments_;
-
-  if (projectName === "--help" || projectName === "-h") {
-    console.log(usage);
-    return;
-  }
-
-  if (!projectName || arguments_.length !== 1) {
-    console.error(usage);
-    process.exitCode = 1;
-    return;
-  }
-
-  try {
-    const projectDirectory = await initializeProject(projectName);
-    console.log(`Created jsx-scxml project in ${projectDirectory}`);
-    console.log("Next steps:");
-    console.log(`  cd ${projectName}`);
-    console.log("  npm install");
-  } catch (error) {
-    console.error(
-      `Unable to create project: ${error instanceof Error ? error.message : error}`,
-    );
-    process.exitCode = 1;
-  }
-}
-
-if (
-  process.argv[1] &&
-  import.meta.url === new URL(process.argv[1], "file:").href
-) {
-  await main();
 }
