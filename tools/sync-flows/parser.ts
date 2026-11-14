@@ -67,7 +67,7 @@ export function parseScxmlToTsx(flowText: string): string {
     ({ name }) => name === "state" || name === "final",
   );
   const nodeRefs = createNodeRefs(nodes);
-  const refRefs = createReferenceRefs(annotations);
+  const refRefs = createReferenceRefs(annotations, nodes);
   imports.add("defineNodes");
   imports.add("node");
   imports.add("finalNode");
@@ -273,17 +273,19 @@ function renderBranch(
   ].join(" ");
   return [
     `<Branch ${props}>`,
-    ...transitions.map((transition) => {
+    ...transitions.map((transition, index) => {
       const assign = child(transition, "assign");
       const script = child(transition, "script");
       const labelExpression = assign
         ? (attribute(assign, "expr") ?? "''")
         : "''";
+      const cond = attribute(transition, "cond");
+      const isElse = index === transitions.length - 1 && cond === undefined;
       return [
         "  <BranchTransition",
         `    label=${quote(unquoteJexl(labelExpression))}`,
         `    to={${nodeRef(nodeRefs, requiredAttribute(transition, "target"))}}`,
-        `    cond=${jexl(attribute(transition, "cond") ?? "true")}`,
+        isElse ? '    cond="Else"' : `    cond=${jexl(cond ?? "true")}`,
         script && `    script=${jexl(script.text)}`,
         "  />",
       ]
@@ -482,15 +484,28 @@ function createNodeRefs(
 ): ReadonlyMap<string, string> {
   const refs = new Map<string, string>();
   const usedKeys = new Set<string>();
+  const reservedReturnKeys = new Set(
+    nodes
+      .filter((node) => node.name === "final")
+      .map((_, index) => `return${index + 1}`),
+  );
+  let returnIndex = 1;
   for (const xmlNode of nodes) {
     const xmlId = requiredAttribute(xmlNode, "id");
     if (refs.has(xmlId))
       throw new Error(`Duplicate top-level node ID: ${xmlId}.`);
 
-    const baseKey = camelCaseKey(xmlId);
+    const baseKey =
+      xmlNode.name === "final"
+        ? `return${returnIndex++}`
+        : camelCaseKey(nodeName(xmlNode) ?? xmlId);
     let key = baseKey;
     let suffix = 2;
-    while (usedKeys.has(key)) key = `${baseKey}${suffix++}`;
+    while (
+      usedKeys.has(key) ||
+      (xmlNode.name !== "final" && reservedReturnKeys.has(key))
+    )
+      key = `${baseKey}${suffix++}`;
     refs.set(xmlId, key);
     usedKeys.add(key);
   }
@@ -499,15 +514,21 @@ function createNodeRefs(
 
 function createReferenceRefs(
   annotations: readonly FlowAnnotation[],
+  nodes: readonly XmlNode[],
 ): ReadonlyMap<string, string> {
   const refs = new Map<string, string>();
+  const nodeNames = new Map(
+    nodes.map((node) => [requiredAttribute(node, "id"), nodeName(node)]),
+  );
   const usedKeys = new Set<string>();
   for (const annotation of annotations) {
     if (annotation.kind !== "reference") continue;
     if (refs.has(annotation.id))
       throw new Error(`Duplicate reference node ID: ${annotation.id}.`);
 
-    const baseKey = camelCaseKey(annotation.id);
+    const baseKey = camelCaseKey(
+      nodeNames.get(annotation.refedNodeID) ?? annotation.id,
+    );
     let key = baseKey;
     let suffix = 2;
     while (usedKeys.has(key)) key = `${baseKey}${suffix++}`;
@@ -515,6 +536,15 @@ function createReferenceRefs(
     usedKeys.add(key);
   }
   return refs;
+}
+
+function nodeName(node: XmlNode): string | undefined {
+  const metadata = readMetadata(node);
+  return isRecord(metadata) &&
+    typeof metadata.name === "string" &&
+    metadata.name
+    ? metadata.name
+    : undefined;
 }
 
 function camelCaseKey(xmlId: string): string {

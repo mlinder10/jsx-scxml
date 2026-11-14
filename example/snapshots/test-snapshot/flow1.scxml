@@ -1,100 +1,100 @@
-<scxml xmlns="http://www.w3.org/2005/07/scxml" xmlns:sf="http://www.swampfoxinc.com/sf?version1" xmlns:cs="http://commons.apache.ogr/scxml" version="1.0" ife-version="1.3.2" initial="welcome" global-module-error-id="global-return-ref-globalReturn" global-module-disconnect-id="global-return-ref-globalReturn">
-  <!--REFNODE|{"id":"global-return-ref-globalReturn","refedNodeID":"global-return","position":{"x":0,"y":0}}-->
+<scxml xmlns="http://www.w3.org/2005/07/scxml" xmlns:sf="http://www.swampfoxinc.com/sf?version1" xmlns:cs="http://commons.apache.ogr/scxml" version="1.0" ife-version="1.3.2" initial="if-node-welcome" global-module-error-id="if-node-globalReturn-ref-globalReturn" global-module-disconnect-id="if-node-globalReturn-ref-globalReturn">
+  <!--REFNODE|{"id":"if-node-globalReturn-ref-globalReturn","refedNodeID":"if-node-globalReturn","position":{"x":0,"y":0}}-->
   <datamodel>
     <data id="flowNode" expr="Breadcrumbs.enter(NodeType.FLOW, '1000_Example')"/>
     <data id="attempts" expr="0"/>
   </datamodel>
-  <state id="welcome" metadata="{&quot;name&quot;:&quot;Welcome Announcement&quot;}">
+  <state id="if-node-welcome" metadata="{&quot;name&quot;:&quot;Welcome Announcement&quot;}">
     <onentry>
       <assign location="nodeName" expr="'Welcome Announcement'"/>
-      <sf:log expr="'sf:announcement::welcome ONENTRY'"/>
+      <sf:log expr="'sf:announcement::if-node-welcome ONENTRY'"/>
       <assign location="lastEnabled" expr="true"/>
       <if cond="lastEnabled">
         <sf:announcement src="" srcexpr=""/>
         <else/>
-        <sf:log expr="'sf:announcement::welcome SKIPPED; enabled expression evaluated false.'"/>
+        <sf:log expr="'sf:announcement::if-node-welcome SKIPPED; enabled expression evaluated false.'"/>
       </if>
     </onentry>
-    <transition event="module.complete" target="dtmf-menu">
+    <transition event="module.complete" target="if-node-dtmfMenu">
       <assign location="lastEvent" expr="_event"/>
     </transition>
     <onexit>
-      <sf:log expr="'sf:announcement::welcome ONEXIT'"/>
+      <sf:log expr="'sf:announcement::if-node-welcome ONEXIT'"/>
     </onexit>
   </state>
-  <state id="dtmf-menu" metadata="{&quot;name&quot;:&quot;DTMF Menu&quot;}">
+  <state id="if-node-dtmfMenu" metadata="{&quot;name&quot;:&quot;DTMF Menu&quot;}">
     <onentry>
       <assign location="nodeName" expr="'DTMF Menu'"/>
-      <sf:log expr="'sf:module::dtmf-menu ONENTRY'"/>
+      <sf:log expr="'sf:module::if-node-dtmfMenu ONENTRY'"/>
       <assign location="lastEnabled" expr="true"/>
       <if cond="lastEnabled">
         <sf:module src="" srcexpr="" namelist="" result="lastResult"/>
         <else/>
-        <sf:log expr="'sf:module::dtmf-menu SKIPPED; enabled expression evaluated false.'"/>
+        <sf:log expr="'sf:module::if-node-dtmfMenu SKIPPED; enabled expression evaluated false.'"/>
       </if>
     </onentry>
-    <transition event="module.complete" target="dtmf-menu-branch">
+    <transition event="module.complete" target="if-node-dtmfMenuBranch">
       <assign location="lastEvent" expr="_event"/>
     </transition>
     <onexit>
-      <sf:log expr="'sf:module::dtmf-menu ONEXIT'"/>
+      <sf:log expr="'sf:module::if-node-dtmfMenu ONEXIT'"/>
     </onexit>
   </state>
-  <state id="dtmf-menu-branch" metadata="{&quot;name&quot;:&quot;Process DTMF Menu&quot;,&quot;nodeType&quot;:&quot;Branch&quot;}">
+  <state id="if-node-dtmfMenuBranch" metadata="{&quot;name&quot;:&quot;Process DTMF Menu&quot;,&quot;nodeType&quot;:&quot;Branch&quot;}">
     <datamodel>
       <data id="branchLabel"/>
     </datamodel>
     <onentry>
       <assign location="nodeName" expr="'Process DTMF Menu'"/>
-      <sf:log expr="'sf:branch::dtmf-menu-branch ONENTRY'"/>
+      <sf:log expr="'sf:branch::if-node-dtmfMenuBranch ONENTRY'"/>
       <assign location="lastEnabled" expr="true"/>
       <if cond="lastEnabled">
         <else/>
-        <sf:log expr="'sf:branch::dtmf-menu-branch SKIPPED; enabled expression evaluated false.'"/>
+        <sf:log expr="'sf:branch::if-node-dtmfMenuBranch SKIPPED; enabled expression evaluated false.'"/>
       </if>
     </onentry>
-    <transition cond="lastResult.lastInputLabel.equalsIgnoreCase('Repeat')" target="welcome" metadata="{&quot;label&quot;:&quot;Repeat&quot;}">
+    <transition cond="lastResult.lastInputLabel.equalsIgnoreCase('Repeat')" target="if-node-welcome" metadata="{&quot;label&quot;:&quot;Repeat&quot;}">
       <assign location="branchLabel" expr="'Repeat'"/>
       <script>Breadcrumbs.exit();</script>
     </transition>
-    <transition cond="true" target="agent-intent" metadata="{&quot;label&quot;:&quot;Agent&quot;}">
+    <transition cond="true" target="if-node-agentIntent" metadata="{&quot;label&quot;:&quot;Agent&quot;}">
       <assign location="branchLabel" expr="'Agent'"/>
       <script>Breadcrumbs.exit();</script>
     </transition>
     <onexit>
-      <sf:log expr="'sf:branch::dtmf-menu-branch ONEXIT'"/>
+      <sf:log expr="'sf:branch::if-node-dtmfMenuBranch ONEXIT'"/>
     </onexit>
   </state>
-  <state id="agent-intent" metadata="{&quot;name&quot;:&quot;Agent Intent&quot;}">
+  <state id="if-node-agentIntent" metadata="{&quot;name&quot;:&quot;Agent Intent&quot;}">
     <onentry>
       <assign location="nodeName" expr="'Agent Intent'"/>
-      <sf:log expr="'sf:intent::agent-intent ONENTRY'"/>
+      <sf:log expr="'sf:intent::if-node-agentIntent ONENTRY'"/>
       <assign location="lastEnabled" expr="true"/>
       <if cond="lastEnabled">
         <sf:intent src="" srcexpr="" immediate="false"/>
         <else/>
-        <sf:log expr="'sf:intent::agent-intent SKIPPED; enabled expression evaluated false.'"/>
+        <sf:log expr="'sf:intent::if-node-agentIntent SKIPPED; enabled expression evaluated false.'"/>
       </if>
     </onentry>
-    <transition event="module.complete" target="global-return">
+    <transition event="module.complete" target="if-node-globalReturn">
       <assign location="lastEvent" expr="_event"/>
     </transition>
     <onexit>
-      <sf:log expr="'sf:intent::agent-intent ONEXIT'"/>
+      <sf:log expr="'sf:intent::if-node-agentIntent ONEXIT'"/>
     </onexit>
   </state>
-  <final id="global-return" metadata="{}">
+  <final id="if-node-globalReturn" metadata="{}">
     <onentry>
       <assign location="nodeName" expr="''"/>
-      <sf:log expr="'Final::global-return ONENTRY'"/>
+      <sf:log expr="'Final::if-node-globalReturn ONENTRY'"/>
       <assign location="lastEnabled" expr="true"/>
       <if cond="lastEnabled">
         <else/>
-        <sf:log expr="'Final::global-return SKIPPED; enabled expression evaluated false.'"/>
+        <sf:log expr="'Final::if-node-globalReturn SKIPPED; enabled expression evaluated false.'"/>
       </if>
     </onentry>
     <onexit>
-      <sf:log expr="'Final::global-return ONEXIT'"/>
+      <sf:log expr="'Final::if-node-globalReturn ONEXIT'"/>
     </onexit>
   </final>
 </scxml>

@@ -18,11 +18,11 @@ import routing from "#routing" with { type: "json" };
 
 const graph = defineNodes({
   nodes: {
-    welcome: node({ xmlId: "welcome" }),
-    dtmfMenu: node({ xmlId: "dtmf-menu" }),
-    dtmfMenuBranch: node({ xmlId: "dtmf-menu-branch" }),
-    agentIntent: node({ xmlId: "agent-intent" }),
-    globalReturn: finalNode({ xmlId: "global-return" }),
+    welcome: node(),
+    dtmfMenu: node(),
+    dtmfMenuBranch: node(),
+    agentIntent: node(),
+    globalReturn: finalNode(),
   },
   refs: {
     globalReturn: refNode("globalReturn", { position: { x: 0, y: 0 } }),

@@ -41,22 +41,26 @@
   },
   "files": [
     "dist",
-    "tools/compile-flows.mjs"
+    "tools/compile-flows.mts",
+    "tools/initialize-project.mts"
   ],
   "bin": {
-    "jsx-scxml-compile-flows": "./tools/compile-flows.mjs"
+    "jsx-scxml-compile-flows": "./tools/compile-flows.mts",
+    "jsx-scxml-init": "./tools/initialize-project.mts"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
+    "init": "npm run build && node ./tools/initialize-project.mts",
     "sync-flows:test": "vitest run tools/sync-flows/test.test.ts",
-    "compile-flows": "npm run build && node ./tools/compile-flows.mjs",
-    "load-project": "npm run build && node ./tools/load-project.mjs"
+    "compile-flows": "npm run build && node ./tools/compile-flows.mts",
+    "load-project": "npm run build && node ./tools/load-project.mts"
   },
   "dependencies": {
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",

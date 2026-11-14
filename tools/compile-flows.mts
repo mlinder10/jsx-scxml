@@ -1,30 +1,20 @@
 #!/usr/bin/env node
 import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { basename, dirname, extname, join, relative, resolve } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { pathToFileURL } from "node:url";
 import ts from "typescript";
 import { serialize } from "jsx-scxml";
 import { validateSwampfox } from "jsx-scxml/swampfox";
+import {
+  buildLocalProjectPaths,
+  getConfigArgument,
+  loadConfigFile,
+} from "./shared.mts";
 
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const [configFilePathArgument] = process.argv.slice(2);
+const configPathArg = getConfigArgument("jsx-scxml-compile-flows");
+const { projectRoot, config } = await loadConfigFile(configPathArg);
+const { snapshots, dev } = buildLocalProjectPaths(projectRoot, config);
 
-if (
-  !configFilePathArgument ||
-  configFilePathArgument === "--help" ||
-  configFilePathArgument === "-h"
-) {
-  console.error("Usage: jsx-scxml-export-flows <config-path>");
-  console.error("       npx jsx-scxml-export-flows <config-path>");
-  process.exit(configFilePathArgument ? 0 : 1);
-}
-
-const configFilePath = resolve(process.cwd(), configFilePathArgument);
-const projectRoot = dirname(configFilePath);
-const config = JSON.parse(await readFile(configFilePath));
-
-const devDirectory = join(projectRoot, config.paths.dev);
-const snapshotsDirectory = join(projectRoot, config.paths.snapshots);
 // Keep temporary modules in the flow project so Node resolves that project's
 // dependencies and package.json "imports" aliases (for example, #modules).
 const temporaryDirectory = join(projectRoot, ".jsx-scxml-export");
@@ -32,10 +22,10 @@ await rm(temporaryDirectory, { recursive: true, force: true });
 await mkdir(temporaryDirectory, { recursive: true });
 
 try {
-  const flowFiles = await findFlowFiles(devDirectory);
+  const flowFiles = await findFlowFiles(dev);
   if (flowFiles.length === 0) {
     console.log(
-      `No .ts or .tsx flow modules found in ${relative(projectRoot, devDirectory)}.`,
+      `No .ts or .tsx flow modules found in ${relative(projectRoot, dev)}.`,
     );
     process.exitCode = 1;
   } else {
@@ -55,7 +45,7 @@ try {
       process.exitCode = 1;
     } else {
       console.log(
-        `Exported ${flowFiles.length} flow${flowFiles.length === 1 ? "" : "s"} to ${relative(projectRoot, snapshotsDirectory)}.`,
+        `Exported ${flowFiles.length} flow${flowFiles.length === 1 ? "" : "s"} to ${relative(projectRoot, snapshots)}.`,
       );
     }
   }
@@ -63,9 +53,9 @@ try {
   await rm(temporaryDirectory, { recursive: true, force: true });
 }
 
-async function exportFlow(sourcePath) {
+async function exportFlow(sourcePath: string) {
   const source = await readFile(sourcePath, "utf8");
-  const relativePath = relative(devDirectory, sourcePath);
+  const relativePath = relative(dev, sourcePath);
   const compiledPath = join(
     temporaryDirectory,
     relativePath.replace(/\.(?:tsx?|mts|cts)$/, ".mjs"),
@@ -106,7 +96,7 @@ async function exportFlow(sourcePath) {
   }
 
   const destinationPath = join(
-    snapshotsDirectory,
+    snapshots,
     dirname(relativePath),
     `${basename(relativePath, extname(relativePath))}.scxml`,
   );
@@ -117,7 +107,7 @@ async function exportFlow(sourcePath) {
   );
 }
 
-function transpileFlow(source, fileName) {
+function transpileFlow(source: string, fileName: string) {
   const result = ts.transpileModule(source, {
     fileName,
     compilerOptions: {
@@ -138,7 +128,7 @@ function transpileFlow(source, fileName) {
     throw new Error(
       ts.formatDiagnosticsWithColorAndContext(diagnostics, {
         getCanonicalFileName: (name) => name,
-        getCurrentDirectory: () => flowProjectRoot,
+        getCurrentDirectory: () => projectRoot,
         getNewLine: () => "\n",
       }),
     );
@@ -147,9 +137,9 @@ function transpileFlow(source, fileName) {
   return result.outputText;
 }
 
-async function findFlowFiles(directory) {
+async function findFlowFiles(directory: string) {
   const entries = await readdir(directory, { withFileTypes: true });
-  const files = [];
+  const files: string[] = [];
 
   for (const entry of entries) {
     const path = join(directory, entry.name);

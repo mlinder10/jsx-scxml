@@ -13,7 +13,7 @@ describe("parseScxmlToTsx", () => {
         <!--FLOWCOMMENT|{"comment":"Some comment","position":{"x":36,"y":-108},"color":"#FFC","width":108,"height":24}-->
         <!--REFNODE|{"id":"start&#45;ref&#45;1","position":{"x":0,"y":180},"refedNodeID":"start"}-->
         <datamodel/>
-        <final id="start"/>
+        <final id="start" metadata="{&quot;name&quot;:&quot;Start node&quot;}"/>
       </scxml>
     `);
 
@@ -23,15 +23,15 @@ describe("parseScxmlToTsx", () => {
     expect(tsx).toContain('comment="Some comment"');
     expect(tsx).toContain("const graph = defineNodes({");
     expect(tsx).toContain("nodes: {");
-    expect(tsx).toContain('start: finalNode({ xmlId: "start" })');
+    expect(tsx).toContain('return1: finalNode({ xmlId: "start" })');
     expect(tsx).toContain("refs: {");
     expect(tsx).toContain(
-      'startRef1: refNode("start", { xmlId: "start-ref-1", position: { x: 0, y: 180 } })',
+      'startNode: refNode("return1", { xmlId: "start-ref-1", position: { x: 0, y: 180 } })',
     );
-    expect(tsx).not.toContain("ref={graph.refs.startRef1}");
+    expect(tsx).not.toContain("ref={graph.refs.startNode}");
     expect(tsx).toContain("graph={graph}");
-    expect(tsx).toContain("initial={graph.nodes.start}");
-    expect(tsx).toContain("globalModuleDisconnectId={graph.refs.startRef1}");
+    expect(tsx).toContain("initial={graph.nodes.return1}");
+    expect(tsx).toContain("globalModuleDisconnectId={graph.refs.startNode}");
     expect(tsx).toContain('globalModuleErrorId={"legacy-target"}');
   });
 
@@ -56,9 +56,30 @@ describe("parseScxmlToTsx", () => {
     expect(tsx).not.toContain("metadata=");
   });
 
+  it("renders a final branch transition without cond as Else", () => {
+    const tsx = parseScxmlToTsx(`
+      <scxml initial="branch">
+        <datamodel/>
+        <state id="branch">
+          <transition cond="input === 'yes'" target="yes"/>
+          <transition target="no"/>
+        </state>
+        <state id="yes"/>
+        <state id="no"/>
+      </scxml>
+    `);
+
+    expect(tsx).toContain("cond={jexl`input === 'yes'`}");
+    expect(tsx).toContain('cond="Else"');
+    expect(tsx).not.toContain("cond={jexl`true`}");
+  });
+
   it("converts standard Swampfox SCXML into equivalent standard-library TSX", async () => {
     const xml = await readFile(
-      new URL("../../example/out/test-snapshot/flow1.scxml", import.meta.url),
+      new URL(
+        "../../example/snapshots/test-snapshot/flow1.scxml",
+        import.meta.url,
+      ),
       "utf8",
     );
     const tsx = parseScxmlToTsx(xml);
@@ -80,15 +101,11 @@ describe("parseScxmlToTsx", () => {
       "cond={jexl`lastResult.lastInputLabel.equalsIgnoreCase('Repeat')`}",
     );
     expect(tsx).toContain("script={jexl`Breadcrumbs.exit();`}");
-    expect(tsx).toContain(
-      "<Return\n      node={graph.nodes.globalReturn}\n    />",
-    );
+    expect(tsx).toContain("<Return\n      node={graph.nodes.return1}\n    />");
     expect(tsx).toContain("initial={graph.nodes.welcome}");
-    expect(tsx).toContain(
-      "globalModuleDisconnectId={graph.nodes.globalReturn}",
-    );
-    expect(tsx).toContain("globalModuleErrorId={graph.nodes.globalReturn}");
-    expect(tsx).toContain("to={graph.nodes.globalReturn}");
+    expect(tsx).toContain("globalModuleDisconnectId={graph.nodes.return1}");
+    expect(tsx).toContain("globalModuleErrorId={graph.nodes.return1}");
+    expect(tsx).toContain("to={graph.nodes.return1}");
     expect(tsx).toContain("const graph = defineNodes({");
     expect(tsx).toContain('node({ xmlId: "welcome" })');
     expect(tsx).toContain('finalNode({ xmlId: "global-return" })');
@@ -109,13 +126,15 @@ describe("parseScxmlToTsx", () => {
           <transition target="1000_Example"/>
         </state>
         <final id="done!"/>
+        <final id="another-done"/>
       </scxml>
     `);
 
     expect(tsx).toContain('node1000Example: node({ xmlId: "1000_Example" })');
     expect(tsx).toContain('aB: node({ xmlId: "a-b" })');
     expect(tsx).toContain('aB2: node({ xmlId: "a_b" })');
-    expect(tsx).toContain('done: finalNode({ xmlId: "done!" })');
+    expect(tsx).toContain('return1: finalNode({ xmlId: "done!" })');
+    expect(tsx).toContain('return2: finalNode({ xmlId: "another-done" })');
     expect(tsx).toContain("initial={graph.nodes.node1000Example}");
     expect(tsx).toContain("node={graph.nodes.node1000Example}");
     expect(tsx).toContain("to={graph.nodes.aB}");

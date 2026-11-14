@@ -11,8 +11,8 @@
     "paths": {
       "#modules": ["./modules.json"],
       "#announcements": ["./announcements.json"],
-      "#routing": ["./routing.json"]
-    }
+      "#routing": ["./routing.json"],
+    },
   },
-  "include": ["snapshots"]
+  "include": ["dev"],
 }

@@ -1,28 +1,26 @@
 #!/usr/bin/env node
-import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
-import { basename, dirname, extname, join, relative, resolve } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
-import ts from "typescript";
-import { serialize } from "jsx-scxml";
-import { validateSwampfox } from "jsx-scxml/swampfox";
+import { dirname, join } from "node:path";
+import {
+  buildLocalProjectPaths,
+  getConfigArgument,
+  loadConfigFile,
+} from "../shared.mts";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { parseScxmlToTsx } from "./parser";
 
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const [configFilePathArgument] = process.argv.slice(2);
+const configPathArg = getConfigArgument("jsx-scxml-sync-flows");
+const { projectRoot, config } = await loadConfigFile(configPathArg);
+const { snapshots, dev } = buildLocalProjectPaths(projectRoot, config);
 
-if (
-  !configFilePathArgument ||
-  configFilePathArgument === "--help" ||
-  configFilePathArgument === "-h"
-) {
-  console.error("Usage: node tools/export-flows.mjs <config-path>");
-  console.error("       npm run export:flows -- <config-path>");
-  process.exit(configFilePathArgument ? 0 : 1);
+// TODO: loop through snapshots directory, then loop through each flow and write to dev directory
+for (const snapshotName in []) {
+  await mkdir(dirname(join(dev, snapshotName)), { recursive: true });
+
+  for (const flowName in []) {
+    const scxmlPath = join(snapshots, snapshotName, flowName);
+    const tsxPath = join(dev, snapshotName, flowName);
+    const scxml = await readFile(scxmlPath, "utf8");
+    const tsx = parseScxmlToTsx(scxml);
+    await writeFile(tsxPath, tsx, "utf8");
+  }
 }
-
-const configFilePath = resolve(process.cwd(), configFilePathArgument);
-const projectRoot = dirname(configFilePath);
-// const config = JSON.parse(await readFile(configFilePath));
-
-// const snapshotsDirectory = join(projectRoot, config.paths.snapshots);
-// const postgresUrl = config.origin.postgresUrl;
-// TODO: read snapshots from db, parse scxml and write as tsx
