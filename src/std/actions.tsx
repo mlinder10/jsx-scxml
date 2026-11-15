@@ -1,6 +1,6 @@
 /** @jsxImportSource jsx-scxml/swampfox */
 
-import type { Jexl } from "../jexl/index.js";
+import type { Jexl } from "./jexl.js";
 import { StdBaseNode } from "./node.js";
 import type { TransitionProps } from "./transition.js";
 import type { NodeProps, Source } from "./types.js";

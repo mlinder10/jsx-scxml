@@ -40,24 +40,78 @@ const graph = defineNodes({
     nonAffirmedParCode: node({ xmlId: "if-node-nXZmDLlIKDrazAqmslu1j" }),
   },
   refs: {
-    processLastCommand: refNode("processLastCommand", { xmlId: "if-node-qXrs6Za0xIyvuhJ5rvush-ref-upeL46MRURe6IxmNdyMCq", position: { x: 996, y: 984 } }),
-    setIntent: refNode("setIntent", { xmlId: "if-node-zREc7KV_RxIbxquURhHXv-ref-T3v1v11sid6SgQ0UpmScg", position: { x: 252, y: 984 } }),
-    allEvents: refNode("allEvents", { xmlId: "if-node-28zRlcevPcqDO6HG8l6Ov-ref-TZp4f97kDq6ZgBc6dsT2y", position: { x: 252, y: 1032 } }),
-    flowEnd: refNode("flowEnd", { xmlId: "if-node-itY6mU41gkIj0mH34kbSt-ref-lXOMo2uqwJIErL6qgvqgX", position: { x: 1020, y: 1176 } }),
-    error: refNode("error", { xmlId: "if-node-_hzbIVOZ82fD9jQ8sTvn5-ref-UWrY5uMB3hQtEsk1VNslc", position: { x: 0, y: 216 } }),
-    disconnect: refNode("disconnect", { xmlId: "if-node-92ufh1ZQIRcycCTjIgnra-ref-pIt_VoJ0jw8DUcxSqIVzv", position: { x: 0, y: 168 } }),
-    flowEnd2: refNode("flowEnd", { xmlId: "if-node-itY6mU41gkIj0mH34kbSt-ref-Hqla7NuGcf5HTl171G8t9", position: { x: 252, y: 1080 } }),
-    processLastCommand2: refNode("processLastCommand", { xmlId: "if-node-qXrs6Za0xIyvuhJ5rvush-ref-sHcrnguBt_p_97hXkBowI", position: { x: 1692, y: 156 } }),
-    flowEnd3: refNode("flowEnd", { xmlId: "if-node-itY6mU41gkIj0mH34kbSt-ref-_WAaNk_uHTlWTreh7rj2Q", position: { x: 492, y: 1080 } }),
-    processLastCommand3: refNode("processLastCommand", { xmlId: "if-node-qXrs6Za0xIyvuhJ5rvush-ref-jUyJZZoYrXVEBBF2GSpEk", position: { x: 852, y: 156 } }),
-    processLastCommand4: refNode("processLastCommand", { xmlId: "if-node-qXrs6Za0xIyvuhJ5rvush-ref-K5hmQ1Qwkdz3QClom4Lne", position: { x: 1068, y: 0 } }),
-    lookupAuthStatus: refNode("lookupAuthStatus", { xmlId: "if-node-hppEOJabwgNyYpSGZ0O_6-ref-YXMH7jNE5EDYe43zPq0wz", position: { x: 1068, y: 60 } }),
-    priorAuthStatus: refNode("priorAuthStatus", { xmlId: "if-node-IEShPTmy62gjkChDqgPVS-ref-vZYiHs8ce58Jlr8a2d2s9", position: { x: 852, y: 216 } }),
-    processLastCommand5: refNode("processLastCommand", { xmlId: "if-node-qXrs6Za0xIyvuhJ5rvush-ref-RxksbTopH5NY9bb9EosTi", position: { x: 1080, y: 432 } }),
-    anncInvalidDos: refNode("anncInvalidDos", { xmlId: "if-node-jqR_oVlmD7AiBAstm0OU_-ref-E_W7DNVeKtR82U33eEA6E", position: { x: 1692, y: 204 } }),
-    flowStart: refNode("flowStart", { xmlId: "if-node-Zs1ToBRMKcP33Z9T3bho6-ref-ZTY6nrP18VsDym2UVoHmN", position: { x: 1692, y: 252 } }),
-    priorAuthStatus2: refNode("priorAuthStatus", { xmlId: "if-node-IEShPTmy62gjkChDqgPVS-ref-0RdVNnYKIE6LRv6FUX8sS", position: { x: 1080, y: 480 } }),
-    flowStart2: refNode("flowStart", { xmlId: "if-node-Zs1ToBRMKcP33Z9T3bho6-ref-ciDJv_8SDii07SNmpLG8o", position: { x: 1080, y: 528 } }),
+    processLastCommand: refNode("processLastCommand", {
+      xmlId: "if-node-qXrs6Za0xIyvuhJ5rvush-ref-upeL46MRURe6IxmNdyMCq",
+      position: { x: 996, y: 984 },
+    }),
+    setIntent: refNode("setIntent", {
+      xmlId: "if-node-zREc7KV_RxIbxquURhHXv-ref-T3v1v11sid6SgQ0UpmScg",
+      position: { x: 252, y: 984 },
+    }),
+    allEvents: refNode("allEvents", {
+      xmlId: "if-node-28zRlcevPcqDO6HG8l6Ov-ref-TZp4f97kDq6ZgBc6dsT2y",
+      position: { x: 252, y: 1032 },
+    }),
+    flowEnd: refNode("flowEnd", {
+      xmlId: "if-node-itY6mU41gkIj0mH34kbSt-ref-lXOMo2uqwJIErL6qgvqgX",
+      position: { x: 1020, y: 1176 },
+    }),
+    error: refNode("error", {
+      xmlId: "if-node-_hzbIVOZ82fD9jQ8sTvn5-ref-UWrY5uMB3hQtEsk1VNslc",
+      position: { x: 0, y: 216 },
+    }),
+    disconnect: refNode("disconnect", {
+      xmlId: "if-node-92ufh1ZQIRcycCTjIgnra-ref-pIt_VoJ0jw8DUcxSqIVzv",
+      position: { x: 0, y: 168 },
+    }),
+    flowEnd2: refNode("flowEnd", {
+      xmlId: "if-node-itY6mU41gkIj0mH34kbSt-ref-Hqla7NuGcf5HTl171G8t9",
+      position: { x: 252, y: 1080 },
+    }),
+    processLastCommand2: refNode("processLastCommand", {
+      xmlId: "if-node-qXrs6Za0xIyvuhJ5rvush-ref-sHcrnguBt_p_97hXkBowI",
+      position: { x: 1692, y: 156 },
+    }),
+    flowEnd3: refNode("flowEnd", {
+      xmlId: "if-node-itY6mU41gkIj0mH34kbSt-ref-_WAaNk_uHTlWTreh7rj2Q",
+      position: { x: 492, y: 1080 },
+    }),
+    processLastCommand3: refNode("processLastCommand", {
+      xmlId: "if-node-qXrs6Za0xIyvuhJ5rvush-ref-jUyJZZoYrXVEBBF2GSpEk",
+      position: { x: 852, y: 156 },
+    }),
+    processLastCommand4: refNode("processLastCommand", {
+      xmlId: "if-node-qXrs6Za0xIyvuhJ5rvush-ref-K5hmQ1Qwkdz3QClom4Lne",
+      position: { x: 1068, y: 0 },
+    }),
+    lookupAuthStatus: refNode("lookupAuthStatus", {
+      xmlId: "if-node-hppEOJabwgNyYpSGZ0O_6-ref-YXMH7jNE5EDYe43zPq0wz",
+      position: { x: 1068, y: 60 },
+    }),
+    priorAuthStatus: refNode("priorAuthStatus", {
+      xmlId: "if-node-IEShPTmy62gjkChDqgPVS-ref-vZYiHs8ce58Jlr8a2d2s9",
+      position: { x: 852, y: 216 },
+    }),
+    processLastCommand5: refNode("processLastCommand", {
+      xmlId: "if-node-qXrs6Za0xIyvuhJ5rvush-ref-RxksbTopH5NY9bb9EosTi",
+      position: { x: 1080, y: 432 },
+    }),
+    anncInvalidDos: refNode("anncInvalidDos", {
+      xmlId: "if-node-jqR_oVlmD7AiBAstm0OU_-ref-E_W7DNVeKtR82U33eEA6E",
+      position: { x: 1692, y: 204 },
+    }),
+    flowStart: refNode("flowStart", {
+      xmlId: "if-node-Zs1ToBRMKcP33Z9T3bho6-ref-ZTY6nrP18VsDym2UVoHmN",
+      position: { x: 1692, y: 252 },
+    }),
+    priorAuthStatus2: refNode("priorAuthStatus", {
+      xmlId: "if-node-IEShPTmy62gjkChDqgPVS-ref-0RdVNnYKIE6LRv6FUX8sS",
+      position: { x: 1080, y: 480 },
+    }),
+    flowStart2: refNode("flowStart", {
+      xmlId: "if-node-Zs1ToBRMKcP33Z9T3bho6-ref-ciDJv_8SDii07SNmpLG8o",
+      position: { x: 1080, y: 528 },
+    }),
   },
 });
 
@@ -65,31 +119,33 @@ export default (
   <Flow
     graph={graph}
     annotations={[
-      <CommentNode comment="Infrastructure" position={{ x: -36, y: 936 }} color="#DDCCFF" width={2124} height={24} />,
+      <CommentNode
+        comment="Infrastructure"
+        position={{ x: -36, y: 936 }}
+        color="#DDCCFF"
+        width={2124}
+        height={24}
+      />,
     ]}
     initial={graph.nodes.flowStart}
     dataModel={{
-          lastEnabled: jexl``,
-          lastResult: jexl``,
-          lastEvent: jexl``,
-          nodeName: jexl``,
-          session: jexl`SFVContext.getSession()`,
-          provider: jexl`SFVContext.getProvider()`,
-          member: jexl`SFVContext.getMember()`,
-          palmettoSession: jexl`SFVContext.getPalmettoSession()`,
-          ivrStatus: jexl`""`,
-          parCode: jexl`""`,
-          noMatchAttemptCtr: jexl`0`,
-          noMatchAttemptCtrMax: jexl`2`,
-        }}
+      lastEnabled: jexl``,
+      lastResult: jexl``,
+      lastEvent: jexl``,
+      nodeName: jexl``,
+      session: jexl`SFVContext.getSession()`,
+      provider: jexl`SFVContext.getProvider()`,
+      member: jexl`SFVContext.getMember()`,
+      palmettoSession: jexl`SFVContext.getPalmettoSession()`,
+      ivrStatus: jexl`""`,
+      parCode: jexl`""`,
+      noMatchAttemptCtr: jexl`0`,
+      noMatchAttemptCtrMax: jexl`2`,
+    }}
     globalModuleDisconnectId={graph.refs.disconnect}
     globalModuleErrorId={graph.refs.error}
   >
-    <Return
-      node={graph.nodes.return1}
-      x={1560}
-      y={972}
-    />
+    <Return node={graph.nodes.return1} x={1560} y={972} />
     <Script
       node={graph.nodes.processLastCommand}
       name="Process Last Command"
@@ -98,7 +154,13 @@ export default (
       y={984}
       inline={jexl`SFVContext.logLastCommand();`}
     />
-    <Branch node={graph.nodes.allEvents} name="All Events" nodeType="Branch" x={492} y={984}>
+    <Branch
+      node={graph.nodes.allEvents}
+      name="All Events"
+      nodeType="Branch"
+      x={492}
+      y={984}
+    >
       <BranchTransition
         label="Return to Parent"
         to={graph.nodes.flowEnd}
@@ -168,20 +230,20 @@ export default (
       y={156}
       to={graph.nodes.processLookupAuthStatus}
       beforeScript={jexl`let baseScript = "JmPartbAmbProviderAuthQuery@PalmettoDatabaseQuery";
-    
+
     if (palmettoSession.service.equals(PalmettoConstants.services.RR)) {
       baseScript = "RrbPartbAmbProviderAuthQuery@PalmettoDatabaseQuery";
     }
-    
+
     // current date format is mmddyyyy, needs to be yyyymmdd
     function formatDate(date) {
       date += '';
       return date.substring(4) + date.substring(0, 2) + date.substring(2, 4);
     }
-    
+
     const startDate = formatDate(member.fromDos);
     const endDate = formatDate(member.toDos);
-    
+
     const res = evalScript(
       baseScript,
       provider.npi,
@@ -193,43 +255,49 @@ export default (
       SFVLogger.INFO("Invalid " + baseScript + " Response: " + res);
       return;
     }
-    
+
     SFVLogger.INFO("Result: " + res);
-    
+
     const target = res.result[0];
     if (empty(target)) {
       SFVLogger.DEBUG("Invalid prior auth status received\n\tFrom: " + fromDos + "\n\tTo: " + toDos)
       return;
     }
-    
+
     SFVLogger.INFO("ivr_status: " + target.ivr_status);
     ivrStatus = target.ivr_status;
-    
+
     if (ivrStatus.equals("NON-AFFIRMED")) {
       const tmpParCode = target.ivr_par_codes.indexOf("Y") + 1;
       if (tmpParCode == 0) {
           SFVLogger.DEBUG("PAR Code not found: " + target.ivr_par_codes);
           return
       }
-    
+
       if (tmpParCode != 14) {
           parCode = tmpParCode + "";
           return;
       }
-    
+
       const parCodeLetter = target.ivr_par14_codes.indexOf("Y");
       if (parCodeLetter == -1) {
           SFVLogger.DEBUG("PAR Code 14 letter not found: " + target.ivr_par14_codes);
           return;
       }
-    
+
       parCode = tmpParCode + ["A", "B", "C", "D", "E"][parCodeLetter];
     }`}
       onExit={jexl`SFVContext.logNodeEnd(nodeName);`}
       inline={jexl`SFVContext.logNodeStart(nodeName);
     SFVContext.setLastCommandContinue();`}
     />
-    <Branch node={graph.nodes.processLookupAuthStatus} name="Process Lookup Auth Status" nodeType="Branch" x={588} y={156}>
+    <Branch
+      node={graph.nodes.processLookupAuthStatus}
+      name="Process Lookup Auth Status"
+      nodeType="Branch"
+      x={588}
+      y={156}
+    >
       <BranchTransition
         label="Process Last Command"
         to={graph.nodes.processLastCommand}
@@ -257,28 +325,28 @@ export default (
       y={264}
       to={graph.nodes.processMenuNoDosMatch}
       onExit={jexl`SFVContext.logNodeEnd(nodeName);
-    
+
     var returnEntityType = lastResult.entityResultValue['replay_type'];
     if (!empty(returnEntityType)) {
     	SFVLogger.INFO("Found replay_type");
     	lastResult.lastInputLabel = 'Replay';
     	return;
     }
-    
+
     returnEntityType = lastResult.entityResultValue['another_type'];
     if (!empty(returnEntityType)) {
     	SFVLogger.INFO("Found another_type");
     	lastResult.lastInputLabel = 'Reenter';
     	return;
     }
-    
+
     returnEntityType = lastResult.entityResultValue['main_menu_type'];
     if (!empty(returnEntityType)) {
     	SFVLogger.INFO("Found main_menu_type");
     	lastResult.lastInputLabel = 'MainMenu';
     	return;
     }
-    
+
     returnEntityType = lastResult.entityResultValue['agent_type'];
     if (!empty(returnEntityType)) {
     	SFVLogger.INFO("Found agent_type");
@@ -288,7 +356,13 @@ export default (
       inline={jexl`SFVContext.logNodeStart(nodeName);
     SFVContext.setLastCommandContinue();`}
     />
-    <Branch node={graph.nodes.processMenuNoDosMatch} name="Process Menu No DOS Match" nodeType="Branch" x={1428} y={156}>
+    <Branch
+      node={graph.nodes.processMenuNoDosMatch}
+      name="Process Menu No DOS Match"
+      nodeType="Branch"
+      x={1428}
+      y={156}
+    >
       <BranchTransition
         label="Process Last Command"
         to={graph.nodes.processLastCommand}
@@ -340,13 +414,13 @@ export default (
         to={graph.nodes.processLastCommand}
         cond={jexl`lastResult.lastInputLabel.equalsIgnoreCase('MainMenu')`}
         script={jexl`SFVContext.logTransition(branchLabel);
-    
+
     if (!palmettoSession.jurisdiction.equals('RR')) {
         getSessionContext().setResultValue('intent.collector.flow', PalmettoConstants.intentRouterFlows.JJ_JM_PART_B_IntentRouterFlow);
         palmettoSession.appID = PalmettoConstants.appIDs.AppID_PartB;
         evalScript('updateQualKeyAppID@PalmettoUtilities');
     }
-    
+
     SFVContext.setLastCommandSetEvent(PalmettoConstants.events.RETURN_MAIN_MENU);`}
       />
       <BranchTransition
@@ -375,7 +449,13 @@ export default (
       inline={jexl`SFVContext.logNodeStart(nodeName);
     SFVContext.setLastCommandContinue();`}
     />
-    <Branch node={graph.nodes.processLookupDosRange} name="Process Lookup DOS Range" nodeType="Branch" x={804} y={0}>
+    <Branch
+      node={graph.nodes.processLookupDosRange}
+      name="Process Lookup DOS Range"
+      nodeType="Branch"
+      x={804}
+      y={0}
+    >
       <BranchTransition
         label="Process Events"
         to={graph.nodes.processLastCommand}
@@ -389,7 +469,13 @@ export default (
         script={jexl`SFVContext.logTransition(branchLabel);`}
       />
     </Branch>
-    <Branch node={graph.nodes.priorAuthStatus} name="Prior Auth Status" nodeType="Branch" x={0} y={432}>
+    <Branch
+      node={graph.nodes.priorAuthStatus}
+      name="Prior Auth Status"
+      nodeType="Branch"
+      x={0}
+      y={432}
+    >
       <BranchTransition
         label="Non-Affirmed"
         to={graph.nodes.nonAffirmedParCode}
@@ -440,28 +526,28 @@ export default (
       y={432}
       to={graph.nodes.processMenuNoDobMatch}
       onExit={jexl`SFVContext.logNodeEnd(nodeName);
-    
+
     var returnEntityType = lastResult.entityResultValue['repeat_type'];
     if (!empty(returnEntityType)) {
     	SFVLogger.INFO("Found repeat_type");
     	lastResult.lastInputLabel = 'Repeat';
     	return;
     }
-    
+
     returnEntityType = lastResult.entityResultValue['another_type'];
     if (!empty(returnEntityType)) {
     	SFVLogger.INFO("Found another_type");
     	lastResult.lastInputLabel = 'Another';
     	return;
     }
-    
+
     returnEntityType = lastResult.entityResultValue['main_menu_type'];
     if (!empty(returnEntityType)) {
     	SFVLogger.INFO("Found main_menu_type");
     	lastResult.lastInputLabel = 'MainMenu';
     	return;
     }
-    
+
     returnEntityType = lastResult.entityResultValue['agent_type'];
     if (!empty(returnEntityType)) {
     	SFVLogger.INFO("Found agent_type");
@@ -471,7 +557,13 @@ export default (
       inline={jexl`SFVContext.logNodeStart(nodeName);
     SFVContext.setLastCommandContinue();`}
     />
-    <Branch node={graph.nodes.processMenuNoDobMatch} name="Process Menu No DOB Match" nodeType="Branch" x={816} y={432}>
+    <Branch
+      node={graph.nodes.processMenuNoDobMatch}
+      name="Process Menu No DOB Match"
+      nodeType="Branch"
+      x={816}
+      y={432}
+    >
       <BranchTransition
         label="Process Last Command"
         to={graph.nodes.processLastCommand}
@@ -516,13 +608,13 @@ export default (
         to={graph.nodes.processLastCommand}
         cond={jexl`lastResult.lastInputLabel.equalsIgnoreCase('MainMenu')`}
         script={jexl`SFVContext.logTransition(branchLabel);
-    
+
     if (!palmettoSession.jurisdiction.equals('RR')) {
         getSessionContext().setResultValue('intent.collector.flow', PalmettoConstants.intentRouterFlows.JJ_JM_PART_B_IntentRouterFlow);
         palmettoSession.appID = PalmettoConstants.appIDs.AppID_PartB;
         evalScript('updateQualKeyAppID@PalmettoUtilities');
     }
-    
+
     SFVContext.setLastCommandSetEvent(PalmettoConstants.events.RETURN_MAIN_MENU);`}
       />
       <BranchTransition

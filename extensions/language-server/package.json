@@ -1,0 +1,46 @@
+{
+  "name": "@jsx-scxml/jexl-language-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Embedded JEXL language services for JSX SCXML authoring",
+  "bin": {
+    "jsx-scxml-jexl-language-server": "out/src/server.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "import:runtime": "node scripts/import-runtime.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test out/test/*.test.js"
+  },
+  "dependencies": {
+    "langium": "~4.2.0",
+    "typescript": "~5.8.0",
+    "vscode-languageserver": "~9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.12",
+    "vscode-uri": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "esbuild": "~0.25.12",
+    "fflate": "^0.8.3",
+    "langium-cli": "~4.2.0",
+    "vscode-jsonrpc": "^8.2.1"
+  },
+  "overrides": {
+    "langium-cli": {
+      "jsonschema": "1.4.1"
+    }
+  },
+  "peerDependencies": {
+    "sf-jexl": "^0.0.6"
+  },
+  "peerDependenciesMeta": {
+    "sf-jexl": {
+      "optional": true
+    }
+  }
+}

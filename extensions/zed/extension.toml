@@ -1,0 +1,15 @@
+id = "jsx-scxml-jexl"
+name = "JSX SCXML JEXL"
+version = "0.1.0"
+schema_version = 1
+description = "Opt-in JEXL language server for JSX SCXML alongside Zed's JavaScript and TypeScript support"
+
+[language_servers.jsx-scxml-jexl]
+name = "JSX SCXML JEXL"
+languages = ["TSX", "TypeScript", "JavaScript"]
+opt_in_languages = ["TSX", "TypeScript", "JavaScript"]
+
+[language_servers.jsx-scxml-jexl.language_ids]
+TSX = "typescriptreact"
+TypeScript = "typescript"
+JavaScript = "javascript"

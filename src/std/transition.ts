@@ -1,4 +1,4 @@
-import type { Jexl } from "../jexl/index.js";
+import type { Jexl } from "./jexl.js";
 import type { Position } from "./types.js";
 
 export type NodeKind = "state" | "final";

@@ -1,0 +1,5 @@
+/target/
+/.cargo-home/
+/.cargo/config.toml
+
+/extension.wasm

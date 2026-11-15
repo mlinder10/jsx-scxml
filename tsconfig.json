@@ -19,7 +19,7 @@
       "jsx-scxml": ["./src/index.ts"],
       "jsx-scxml/jsx-runtime": ["./src/core/jsx-runtime.ts"],
       "jsx-scxml/jsx-dev-runtime": ["./src/core/jsx-dev-runtime.ts"],
-      "jsx-scxml/jexl": ["./src/jexl/index.ts"],
+      "jsx-scxml/jexl": ["src/jexl/jexl.ts"],
       "jsx-scxml/swampfox": ["./src/swampfox/index.ts"],
       "jsx-scxml/swampfox/jsx-runtime": ["./src/swampfox/jsx-runtime.ts"],
       "jsx-scxml/swampfox/jsx-dev-runtime": [

@@ -1,5 +1,5 @@
 import type { ScxmlChild } from "../core/ast.js";
-import type { Jexl } from "../jexl/index.js";
+import type { Jexl } from "./jexl.js";
 import type { NodeRef } from "./transition.js";
 
 export type Position = {

@@ -1,6 +1,6 @@
 /** @jsxImportSource jsx-scxml/swampfox */
 
-import type { Jexl } from "../jexl/index.js";
+import type { Jexl } from "./jexl.js";
 import type { ScxmlChild } from "../core/ast.js";
 import type { KnownNodeType, Metadata, NodeProps } from "./types.js";
 import {

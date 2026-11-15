@@ -1,5 +1,3 @@
-export { expr, expression } from "./expression.js";
-
 declare const brand: unique symbol;
 
 type Brand<T, TBrand extends string> = T & {
@@ -11,7 +9,7 @@ export type Jexl = Brand<string, "jexl">;
 
 /** Creates an explicitly marked JEXL source string. */
 export function jexl(strings: TemplateStringsArray, ..._: never[]): Jexl {
-  if (strings.length !== 1)
+  if (strings.raw.length !== 1)
     throw new Error("jexl strings cannot use template values");
-  return strings[0] as Jexl;
+  return strings.raw[0] as Jexl;
 }

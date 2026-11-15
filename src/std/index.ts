@@ -49,3 +49,4 @@ export type {
   ReferenceMetadata,
   ReferenceNodeProps,
 } from "./comments.js";
+export * from "./jexl.js";
